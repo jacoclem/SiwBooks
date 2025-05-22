@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <title>SiwBooks - Registrazione</title>
+        <link rel="stylesheet" href="/css/style.css" />
+    </head>
+    <body>
+        <div class="box-registrazione">
+            <form th:action="@{/registrazione}" th:method="POST">
+                <h1>Registrati</h1>
+                <table>
+                    <tr>
+                        <td class="indice"><label for="username">Username:</label></td>
+                        <td><input type="text" name="username" required></td>
+                    </tr>
+                    <tr>
+                        <td class="indice"><label for="nome">Nome:</label></td>
+                        <td><input type="text" name="nome" required></td>
+                    </tr>
+                    <tr>
+                        <td class="indice"><label for="cognome">Cognome:</label></td>
+                        <td><input type="text" name="cognome" required></td>
+                    </tr>
+                    <tr>
+                        <td class="indice"><label for="email">Email:</label></td>
+                        <td><input type="email" name="email" required></td>
+                    </tr>
+                    <tr>
+                        <td class="indice"><label for="dataDiNascita">Data di nascita:</label></td>
+                        <td><input type="date" name="dataDiNascita" required></td>
+                    </tr>
+                    <tr>
+                        <td class="indice"><label for="password">Password:</label></td>
+                        <td><input type="password" name="password" required></td>
+                    </tr>
+                    <tr>
+                        <td class="indice"><label for="passwordConfirm">Conferma password:</label></td>
+                        <td><input type="password" name="passwordConfirm" required></td>
+                    </tr>
+                    <tr>
+                        <td><a class="register" type="submit">Registrati</a></td>
+						<td><a class="cancel" href="/">Torna indietro</a></td>
+                    </tr>
+                </table>
+            </form>
+        </div>   
+    </body>
+</html>
