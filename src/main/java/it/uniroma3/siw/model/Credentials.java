@@ -30,8 +30,6 @@ public class Credentials {
 	@Column(nullable = false)
 	private String password;
 	
-	@Column(nullable = false)
-	private String passwordConfirm;
 	
 	@Column(nullable = false)
 	private String ruolo;
@@ -81,19 +79,6 @@ public class Credentials {
 		this.password = password;
 	}
 
-	/**
-	 * @return the passwordConfirm
-	 */
-	public String getPasswordConfirm() {
-		return passwordConfirm;
-	}
-
-	/**
-	 * @param passwordConfirm the passwordConfirm to set
-	 */
-	public void setPasswordConfirm(String passwordConfirm) {
-		this.passwordConfirm = passwordConfirm;
-	}
 
 	/**
 	 * @return the ruolo

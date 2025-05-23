@@ -1,44 +1,51 @@
 package it.uniroma3.siw.model;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Past;
 
 @Entity
 public class Utente {
 
 	@Id
-	private String username;
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long id;
 	
 	@Column(nullable = false)
+	@Email
 	private String email;
 	
 	@Column(nullable = false)
-	private String password;
+	@NotBlank
+	private String nome;
 	
 	@Column(nullable = false)
-	private String ruolo;
+	@NotBlank
+	private String cognome;
+	
+	@Column(nullable = false)
+	@Past
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private LocalDate dataDiNascita;
+
 	
 	@OneToMany(mappedBy = "utente")
 	private List<Recensione> recensioni;
 
-	/**
-	 * @return the username
-	 */
-	public String getUsername() {
-		return username;
-	}
 
-	/**
-	 * @param username the username to set
-	 */
-	public void setUsername(String username) {
-		this.username = username;
-	}
 
 	/**
 	 * @return the email
@@ -47,40 +54,79 @@ public class Utente {
 		return email;
 	}
 
-	/**
-	 * @param email the email to set
-	 */
-	public void setEmail(String email) {
-		this.email = email;
-	}
+
 
 	/**
-	 * @return the password
+	 * @return the id
 	 */
-	public String getPassword() {
-		return password;
+	public Long getId() {
+		return id;
 	}
 
-	/**
-	 * @param password the password to set
-	 */
-	public void setPassword(String password) {
-		this.password = password;
-	}
+
 
 	/**
-	 * @return the ruolo
+	 * @param id the id to set
 	 */
-	public String getRuolo() {
-		return ruolo;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
+
+
 	/**
-	 * @param ruolo the ruolo to set
+	 * @return the nome
 	 */
-	public void setRuolo(String ruolo) {
-		this.ruolo = ruolo;
+	public String getNome() {
+		return nome;
 	}
+
+
+
+	/**
+	 * @param nome the nome to set
+	 */
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+
+
+	/**
+	 * @return the cognome
+	 */
+	public String getCognome() {
+		return cognome;
+	}
+
+
+
+	/**
+	 * @param cognome the cognome to set
+	 */
+	public void setCognome(String cognome) {
+		this.cognome = cognome;
+	}
+
+
+
+	/**
+	 * @return the dataDiNascita
+	 */
+	public LocalDate getDataDiNascita() {
+		return dataDiNascita;
+	}
+
+
+
+	/**
+	 * @param dataDiNascita the dataDiNascita to set
+	 */
+	public void setDataDiNascita(LocalDate dataDiNascita) {
+		this.dataDiNascita = dataDiNascita;
+	}
+
+
 
 	/**
 	 * @return the recensioni
@@ -89,6 +135,8 @@ public class Utente {
 		return recensioni;
 	}
 
+
+
 	/**
 	 * @param recensioni the recensioni to set
 	 */
@@ -96,10 +144,23 @@ public class Utente {
 		this.recensioni = recensioni;
 	}
 
+
+
+	/**
+	 * @param email the email to set
+	 */
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(ruolo, username);
+		return Objects.hash(cognome, dataDiNascita, email, nome);
 	}
+
+
 
 	@Override
 	public boolean equals(Object obj) {
@@ -110,9 +171,13 @@ public class Utente {
 		if (getClass() != obj.getClass())
 			return false;
 		Utente other = (Utente) obj;
-		return Objects.equals(ruolo, other.ruolo) && Objects.equals(username, other.username);
+		return Objects.equals(cognome, other.cognome) && Objects.equals(dataDiNascita, other.dataDiNascita)
+				&& Objects.equals(email, other.email) && Objects.equals(nome, other.nome);
 	}
+
 	
+
+
 	
 	
 }

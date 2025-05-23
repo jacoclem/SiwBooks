@@ -16,7 +16,7 @@ body {
     font-size: 4em;
 }
 
-p {
+.sottotitolo {
     color: white;
     text-align: center;
     font-size: 1.5em;
@@ -74,6 +74,7 @@ p {
     margin-bottom: 15px;
     cursor: pointer;
     border-radius: 12px;
+	border: 0px;
 }
 
 .register{
@@ -88,6 +89,7 @@ p {
     margin-bottom: 15px;
     cursor: pointer;
     border-radius: 12px;
+	border: 0px;
 }
 
 .cancel{
@@ -125,8 +127,8 @@ p {
     height: 40px; 
 }
 
-.box-registrazione td {
-    width: 67%; 
+.box-registrazione input{
+	width: 250px;
 }
 
 .box-registrazione h1{

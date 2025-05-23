@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <title>SiwBooks - Registrazione</title>
+        <link rel="stylesheet" href="/css/style.css" />
+    </head>
+    <body>
+        <div class="box-registrazione">
+            <form th:action="@{/login}" th:method="POST">
+                <h1>Login</h1>
+				<span><p th:if="${error}" style="color: red;">Errore di login, riprova.</p></span>
+                <table style="width:100%;">
+                    <tr>
+                        <td class="indice"><label>Username:</label></td>
+                        <td><input type="text" name="username" required></td>
+                    </tr>
+                    <tr>
+                        <td class="indice"><label>Passowrd:</label></td>
+                        <td><input type="password" name="password" required></td>
+                    </tr>
+                    <tr>
+                        <td><button class="login" type="submit">Login</button></td>
+                        <td><a class="cancel" href="/">Torna indietro</a></td>
+                    </tr>
+                </table>
+            </form>
+        </div>   
+    </body>
+</html>
