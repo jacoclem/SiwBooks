@@ -63,7 +63,13 @@ public class AuthenticationController {
     // Pagina di successo dopo login
     @GetMapping("/success")
     public String successPage() {
-        return "index"; // La pagina di successo, può essere la home o una dashboard
+        UserDetails userDetails = (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Credentials credentials = credentialsService.getCredentials(userDetails.getUsername());
+        if(credentials.getRuolo().equals(Credentials.ADMIN_ROLE)){
+        	return "admin/index";
+        }else {
+        	return  "cliente/index";
+        }
     }
     
     
@@ -76,17 +82,7 @@ public class AuthenticationController {
 	                             Model model) {
     	
 	    
-	    // Stampa i dati che arrivano nel controller
-	    System.out.println("Utente: " + utente);
-	    System.out.println("Credentials: " + credentials);
-	    System.out.println("Conferma Password:" + confermaPassword);
 
-	    // Log degli errori
-	    System.out.println("Errori utente: " + utenteBindingResult.getAllErrors());
-	    System.out.println("Errori credenziali: " + credentialsBindingResult.getAllErrors());
-	    
-	    System.out.println(credentialsBindingResult.hasErrors());
-	    System.out.println(utenteBindingResult.hasErrors());
 
 	    if (!credentials.getPassword().equals(confermaPassword)) {
 	        credentialsBindingResult.rejectValue("passwordConfirm", "error.credentials", "Le password non coincidono");

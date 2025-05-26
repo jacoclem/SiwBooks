@@ -25,6 +25,32 @@ public class CredentialsService {
 		return this.credentialsRepository.save(credentials);
 	}
 	
+	public boolean existsByUsername(String username) {
+		return credentialsRepository.existsByUsername(username);
+	}
+	
+	public boolean passwordIsValid(String psw) {
+	    if (psw == null || psw.length() < 8) {
+	        return false;
+	    }
+
+	    boolean hasLetter = false;
+	    boolean hasDigit = false;
+	    boolean hasSpecialChar = false;
+
+	    for (char c : psw.toCharArray()) {
+	        if (Character.isLetter(c)) {
+	            hasLetter = true;
+	        } else if (Character.isDigit(c)) {
+	            hasDigit = true;
+	        } else if (!Character.isLetterOrDigit(c)) {
+	            hasSpecialChar = true;
+	        }
+	    }
+
+	    return hasLetter && hasDigit && hasSpecialChar;
+	}
+
 	
 	
 }

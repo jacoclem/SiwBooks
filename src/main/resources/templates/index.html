@@ -11,10 +11,15 @@
         <h1 class="titolo">SiwBooks</h1>
         <p class="sottotitolo">Scopri i libri preferiti dai lettori!</p>
         <a class="get-started" href="/utente/">Esplora i libri!</a>
-        <div class="buttons">
-            <a class="login" href="/login">Login</a>
-            <a class="register" href="/registrazione">Registrati</a>
-        </div>
+		<div th:if="${userDetails}" class="buttons">
+					<span th:text="${userDetails.username}"></span>
+					<a class="register" href="/logout">Logout</a>
+		            
+		</div>
+		<div th:unless="${user}" class="buttons">
+			<a class="login" href="/login">Login</a>
+			<a class="register" href="/registrazione">Registrati</a>
+		</div>
     </div>
     
 

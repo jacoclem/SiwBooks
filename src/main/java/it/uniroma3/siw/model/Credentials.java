@@ -10,6 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 public class Credentials {
@@ -25,13 +26,16 @@ public class Credentials {
 	private Long id;
 	
 	@Column(nullable = false)
+	@NotBlank
 	private String username;
 	
 	@Column(nullable = false)
+	@NotBlank
 	private String password;
 	
 	
 	@Column(nullable = false)
+	@NotBlank
 	private String ruolo;
 	
 	@OneToOne(cascade = CascadeType.ALL)
@@ -108,26 +112,6 @@ public class Credentials {
 		this.utente = utente;
 	}
 
-	/**
-	 * @return the defaultRole
-	 */
-	public static String getDefaultRole() {
-		return DEFAULT_ROLE;
-	}
-
-	/**
-	 * @return the adminRole
-	 */
-	public static String getAdminRole() {
-		return ADMIN_ROLE;
-	}
-
-	/**
-	 * @return the clientRole
-	 */
-	public static String getClientRole() {
-		return USER_ROLE;
-	}
 
 	@Override
 	public int hashCode() {
