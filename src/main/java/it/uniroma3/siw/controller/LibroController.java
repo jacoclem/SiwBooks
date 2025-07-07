@@ -29,27 +29,7 @@ public class LibroController {
 	@Autowired LibroService libroService;
 	@Autowired LibroRepository libroRepository;
 	
-	@GetMapping(value = "/admin/listaLibri")
-	public String getMenu(Model model) {
-	    List<Libro> libri = (List<Libro>) libroRepository.findAll();
-
-	    
-	    Map<Long, Double> medieVoti = new HashMap<>();
-	    Map<Long, Integer> countRecensioni = new HashMap<>();
-	    for (Libro libro : libri) {
-	        Double media = libroService.getMediaVotiById(libro.getId()); 
-	        Integer count = libroService.getNumRecensioni(libro.getId());
-	        medieVoti.put(libro.getId(), media);
-	        countRecensioni.put(libro.getId(), count);
-	    }
-
-	    model.addAttribute("libri", libri);
-	    model.addAttribute("medieVoti", medieVoti);
-	    model.addAttribute("numRecensioni", countRecensioni);
-
-	    return "/admin/gestioneLibri";
-	}
-
+	
 	
 	
 	@GetMapping(value = "/admin/aggiungiLibro")
@@ -87,5 +67,27 @@ public class LibroController {
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.IMAGE_JPEG_VALUE)
                 .body(libro.getImmagine());
+    }
+    
+    
+    @GetMapping("/catalogoLibri")
+    public String getLibri(Model model) {
+List<Libro> libri = (List<Libro>) libroRepository.findAll();
+
+	    
+	    Map<Long, Double> medieVoti = new HashMap<>();
+	    Map<Long, Integer> countRecensioni = new HashMap<>();
+	    for (Libro libro : libri) {
+	        Double media = libroService.getMediaVotiById(libro.getId()); 
+	        Integer count = libroService.getNumRecensioni(libro.getId());
+	        medieVoti.put(libro.getId(), media);
+	        countRecensioni.put(libro.getId(), count);
+	    }
+
+	    model.addAttribute("libri", libri);
+	    model.addAttribute("medieVoti", medieVoti);
+	    model.addAttribute("numRecensioni", countRecensioni);
+
+	    return "/catalogoLibri";
     }
 }

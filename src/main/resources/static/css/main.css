@@ -335,9 +335,9 @@ h6 {
 .menuLibri .content h3 {
   font-size: 16px;
   font-weight: 500;
-  line-height: 19px;
+/*  line-height: 19px;
   padding: 10px 20px;
-  background: color-mix(in srgb, var(--accent-color), transparent 95%);
+  background: color-mix(in srgb, var(--accent-color), transparent 95%);*/
   color: var(--accent-color);
   border-radius: 7px;
   display: inline-block;
@@ -358,7 +358,7 @@ h6 {
   font-weight: 500;
   font-size: 16px;
   letter-spacing: 1px;
-  padding: 12px 24px;
+  padding: 6px 12px;
   border-radius: 5px;
   transition: 0.3s;
   display: inline-flex;
@@ -381,6 +381,44 @@ h6 {
 .menuLibri .content .read-more:hover i {
   margin-left: 10px;
 }
+
+
+.menuLibri .content .read-more2 {
+  background-color: #3a3939;
+  color: white;
+  
+  font-family: var(--heading-font);
+  font-weight: 500;
+  font-size: 16px;
+  letter-spacing: 1px;
+  padding: 12px 24px;
+  border-radius: 5px;
+  transition: 0.3s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.menuLibri .content .read-more2 i {
+  font-size: 18px;
+  margin-left: 5px;
+  line-height: 0;
+  transition: 0.3s;
+}
+
+.menuLibri .content .read-more2:hover {
+  background: color-mix(in srgb, #3a3939, transparent 20%);
+  padding-right: 19px;
+}
+
+.menuLibri .content .read-more2:hover i {
+  margin-left: 10px;
+}
+
+
+
+
+
 
 .menuLibri .icon-box {
   background-color: var(--surface-color);

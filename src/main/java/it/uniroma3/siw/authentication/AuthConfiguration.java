@@ -45,8 +45,8 @@ public class AuthConfiguration{
 		//.requestMatchers("/**").permitAll()
 		
 		//CHIUNQUE PUO' ACCEDERE
-		.requestMatchers(HttpMethod.GET, "/", "/index", "/registrazione", "/formRegistrazione", "/css/**", "/img/**", "/js/**", "/vendor/**", "favicon.ico").permitAll()
-		.requestMatchers(HttpMethod.POST,"/registrazione", "/formRegistrazione", "/login").permitAll()
+		.requestMatchers(HttpMethod.GET, "/", "/index", "/registrazione", "/login", "/css/**", "/img/**","/libro/**", "/js/**", "/vendor/**", "favicon.ico", "/catalogoLibri").permitAll()
+		.requestMatchers(HttpMethod.POST,"/registrazione", "/login").permitAll()
 		
 		
 		//.requestMatchers(HttpMethod.GET,"/admin/**").hasAnyAuthority(ADMIN_ROLE)

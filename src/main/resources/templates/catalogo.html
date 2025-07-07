@@ -71,10 +71,10 @@
   <main class="main">
 
 
-	<section id="menuLibri" class="menuLibri section light-background">
+	<section id="menuLibri" class="menuLibri section light-background" style="min-height: 100vh;">
 
 	      <div class="container aos-init aos-animate" style="margin-top: 100px;" data-aos="fade-up" data-aos-delay="100">
-	        <div class="row align-items-xl-center gy-5  p-2" style="background-color: rgb(238, 238, 238); border-radius: 30px;">
+	        <div sec:authorize="hasAuthority('ADMIN')" class="row align-items-xl-center gy-5  p-2" style="background-color: rgb(238, 238, 238); border-radius: 30px;">
 
 	          <div class="col-xl-12 content mt-2">
 	            <h3>Amministratore</h3>
@@ -82,14 +82,11 @@
 	            <p>Da questa schermata è possibile aggiungere, rimuovere e modificare i libri nella piattaforma.</p>
 	            <a th:href="@{/admin/aggiungiLibro}" class="read-more"><span>Aggiungi un nuovo libro</span><i class="bi bi-arrow-right"></i></a>
 	          </div>
-			  
-			  
-
-	        </div>
+			</div>
 	
 		  
 		  <!-- Lista libri-->
-		  	        <div th:if="${libri.empty}" class="text-align-center mt-5 content">
+		  	        <div th:if="${libri.empty}" class="text-align-center mt-5 content" >
 						<h3>Nessun libro nel database</h3>
 					</div>
 					<div th:if ="${not libri.empty}">
@@ -101,14 +98,14 @@
 			  	          <div class="col-xl-9 content mt-2">
 			  	           	<div class="col">
 								<h3 class="me-3"><span th:if="${not libro.autori.empty}" th:each="autore : ${libro.autori}"><span th:text="${autore.cognome}"></span><span th:text="${autore.nome}"></span></span> <span th:if="${libro.autori.empty}">Nessun autore inserito</span></h3>
-								<a 	th:href="@{/admin/listaAutori/{id}/(id=${libro.id})}" class="read-more pt-1 pb-1 ps-2 pe-2"><span>Modifica autori</span> <i class="bi bi-pencil-fill"></i></a>
-								<a 	th:href="@{/admin/editAuto/{id}/(id=${libro.id})}" class="read-more pt-1 pb-1 ps-2 pe-2"><span>Modifica dettagli</span> <i class="bi bi-database-fill-add"></i></a>
-								<a 	th:href="@{/admin/delete/{id}/(id=${libro.id})}" class="read-more pt-1 pb-1 ps-2 pe-2"><span>Elimina libro</span> <i class="bi bi-trash-fill"></i></a>
+								<a sec:authorize="hasAuthority('ADMIN')"	th:href="@{/admin/listaAutori/{id}/(id=${libro.id})}" class="read-more2 btn-secondary pt-1 pb-1 ps-2 pe-2"><span>Modifica autori</span> <i class="bi bi-pencil-fill"></i></a>
+								<a sec:authorize="hasAuthority('ADMIN')"	th:href="@{/admin/editAuto/{id}/(id=${libro.id})}" class="read-more2 pt-1 pb-1 ps-2 pe-2"><span>Modifica dettagli</span> <i class="bi bi-pencil-square"></i></a>
+								<a sec:authorize="hasAuthority('ADMIN')"	th:href="@{/admin/delete/{id}/(id=${libro.id})}" class="read-more2 pt-1 pb-1 ps-2 pe-2"><span>Elimina libro</span> <i class="bi bi-trash-fill"></i></a>
 							</div>
 			  	            <h2 th:text="${libro.titolo}"></h2>
 			  	            <p >Anno pubblicazione: <span th:text="${libro.anno}"></span></p>
-							<h3 >Valutazione: <span th:text="${medieVoti[libro.id]}">-</span> /5  <i class="bi bi-star-fill"></i></h3>
-			  	            <a 	th:href="@{/recensioni/{id}/(id=${libro.id})}" class="read-more"><span>Vedi tutte le recensioni</span> (<span th:text="${numRecensioni[libro.id]}">0</span>) <i class="bi bi-arrow-right"></i></a>
+							<h3 class="me-3" >Valutazione: <span th:text="${medieVoti[libro.id]}">-</span> /5  <i class="bi bi-star-fill"></i></h3>
+			  	            <a 	th:href="@{/recensioni/{id}/(id=${libro.id})}" class="read-more "><span>Vedi tutte le recensioni</span> (<span th:text="${numRecensioni[libro.id]}">0</span>) <i class="bi bi-arrow-right"></i></a>
 			  	          </div>
 						  
 						  
