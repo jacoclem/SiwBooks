@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>SiwBooks - Registrazione</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+    <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="/vendor/aos/aos.css" rel="stylesheet">
+    <link href="/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+    <link href="/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+  
+  
+  <!-- Main CSS File -->
+  <link href="/css/main.css" rel="stylesheet">
+
+</head>
+
+<body class="index-page">
+
+  <header id="header" class="header d-flex align-items-center fixed-top">
+    <div class="container-fluid position-relative d-flex align-items-center justify-content-between">
+
+      <a th:href="@{/}" class="logo d-flex align-items-center me-auto me-xl-0">
+
+        <h1 class="sitename">SiwBooks</h1><span>.</span>
+      </a>
+
+      <nav id="navmenu" class="navmenu">
+        <ul class="ms-5">
+          <li><a th:href="@{/}">Home</a></li>
+		  <li><a th:href="@{/catalogoLibri}">Catalogo libri</a></li>
+		  <li><a th:href="@{/catalgoAutori}" >Lista autori</a></li>
+		  
+		  <li sec:authorize="hasAuthority('ADMIN')">
+  	        <a th:href="@{/admin/listaLibri}" class="nav-link">Gestisci Libri</a>
+  	      </li>
+		  
+		  <li sec:authorize="hasAuthority('ADMIN')">
+	        <a th:href="@{/admin/listaAutori}" class="nav-link">Gestisci Autori</a>
+	      </li>
+		  
+		  <li sec:authorize="hasAuthority('CLIENT')">
+  	        <a th:href="@{/client/listaRecensioni}" class="nav-link">Le mie recensioni</a>
+  	      </li>
+          
+        </ul>
+        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+      </nav>
+
+     
+		<div  class="action-btn">
+			<a sec:authorize="isAnonymous()" class="btn-getstarted me-4" th:href="@{/login}">Accedi</a>
+			 <a sec:authorize="isAnonymous()" class="btn-getstarted me-4" th:href="@{/registrazione}">Registrati</a>
+			 <a sec:authorize="hasAuthority('CLIENT') or hasAuthority('ADMIN')" class="btn-getstarted me-4" th:href="@{/logout}">Logout</a>
+		</div>
+		
+		
+    </div>
+  </header>
+
+  <main class="main">
+
+    <!-- Hero Section -->
+    <section id="login" class="login section dark-background">
+
+      <img src="/img/background.jpg" alt=""  style="filter: brightness(50%)">
+
+
+		<div class="container">
+			<form th:action="@{/registrazione}" method="post" class="login-form aos-init aos-animate" data-aos="fade-up" data-aos-delay="200">
+			              <div class="row gy-4">
+							<h2>Registrazione</h2>
+							<div  th:if="${errorsGlobal != null}"  class="alert alert-danger" role="alert">
+							  <p th:each="err : ${errorsGlobal}" th:text="${err}" class="alert alert-danger"></p>
+							</div>
+							
+							<div th:if="${errorsGlobal != null}" class="mb-3">
+				                <p th:each="err : ${errorsGlobal}" th:text="${err}" class="text-danger"></p>
+				            </div>
+							
+							
+			                <div class="col-md-6">
+								<label>Username</label>
+								<span th:if="${#fields.hasErrors('credentials.username')}" th:errors="*{credentials.username}"
+	                               th:style="'color:red'">
+	                           </span>
+			                  <input type="text" th:field="${credentials.username}" class="form-control" placeholder="Username" required >
+			                </div>
+
+							<div class="col-md-6">
+								<label>Nome</label>
+								<span th:if="${#fields.hasErrors('utente.nome')}" th:errors="*{utente.nome}"
+	                               th:style="'color:red'">
+	                           </span>
+			                  <input type="text" th:field="${utente.nome}" class="form-control" placeholder="Nome" required >
+			                </div>
+							
+							<div class="col-md-6">
+								<label>Cognome</label>
+								<span th:if="${#fields.hasErrors('utente.cognome')}" th:errors="*{utente.cognome}"
+	                               th:style="'color:red'">
+	                           </span>
+			                  <input type="text" th:field="${utente.cognome}" class="form-control" placeholder="Cognome" required >
+			                </div>
+							
+							
+							
+							<div class="col-md-6">
+								<label>Data di nascita:</label>
+								<span th:if="${#fields.hasErrors('utente.dataDiNascita')}" th:errors="*{utente.dataDiNascita}"
+	                               th:style="'color:red'">
+	                           </span>
+			                  <input type="date" th:field="${utente.dataDiNascita}" class="form-control" placeholder="Data Di Nascita" required >
+			                </div>
+							
+							<div class="col-md-12">
+								<label>Email</label>
+								<span th:if="${#fields.hasErrors('utente.email')}" th:errors="*{utente.email}"
+	                               th:style="'color:red'">
+	                           </span>
+			                  <input type="text" th:field="${utente.email}" class="form-control" placeholder="Email" required >
+			                </div>
+							
+							<div class="col-md-6">
+								<label>Password</label>
+								<span th:if="${#fields.hasErrors('credentials.password')}" th:errors="*{credentials.password}"
+	                               th:style="'color:red'">
+	                           </span>
+			                  <input type="password" th:field="${credentials.password}" class="form-control" placeholder="Password" required >
+			                </div>
+							
+							<div class="col-md-6">
+								<label>Password</label>
+								<span th:if="${#fields.hasErrors('credentials.passwordConfirm')}" th:errors="*{credentials.passwordConfirm}"
+	                               th:style="'color:red'">
+	                           </span>
+			                  <input type="password" th:field="${credentials.passwordConfirm}" class="form-control" placeholder="Conferma password" required >
+			                </div>
+
+			                
+
+							<div class="col-12 text-center">
+
+				                  <button type="submit">Registrati</button>
+				                </div>
+
+			              </div>
+			            </form>
+
+		</div>
+      
+
+    </section><!-- /Home Section -->
+
+  </main>
+
+  <!-- Scroll Top -->
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Preloader -->
+  <div id="preloader"></div>
+
+  <!-- Vendor JS Files -->
+  <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="/vendor/php-email-form/validate.js"></script>
+  <script src="/vendor/aos/aos.js"></script>
+  <script src="/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="/vendor/purecounter/purecounter_vanilla.js"></script>
+  <script src="/vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
+  <script src="/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+  <script src="/vendor/swiper/swiper-bundle.min.js"></script>
+
+  <!-- Main JS File -->
+  <script src="/js/main.js"></script>
+
+</body>
+
+</html>

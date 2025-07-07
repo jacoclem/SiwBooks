@@ -36,7 +36,7 @@ public class AuthenticationController {
             if (credentials.getRuolo().equals(Credentials.ADMIN_ROLE)) {
                 return "index"; // Admin
             }
-            if (credentials.getRuolo().equals(Credentials.USER_ROLE)) {
+            if (credentials.getRuolo().equals(Credentials.CLIENT_ROLE)) {
                 return "index"; // Utente
             }
         }
@@ -48,7 +48,7 @@ public class AuthenticationController {
     public String showRegisterPage(Model model) {
         model.addAttribute("utente", new Utente());
         model.addAttribute("credentials", new Credentials());
-        return "formRegistrazione"; // Pagina di registrazione
+        return "registrazione"; // Pagina di registrazione
     }
 
     // Mostra la pagina di login
@@ -57,54 +57,43 @@ public class AuthenticationController {
         if (error != null) {
             model.addAttribute("error", "Credenziali errate, riprova.");
         }
-        return "formLogin"; // Pagina di login
+        return "login"; // Pagina di login
     }
 
     // Pagina di successo dopo login
     @GetMapping("/success")
-    public String successPage() {
+    public String successPage(Model model) {
         UserDetails userDetails = (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Credentials credentials = credentialsService.getCredentials(userDetails.getUsername());
-        if(credentials.getRuolo().equals(Credentials.ADMIN_ROLE)){
-        	return "admin/index";
-        }else {
-        	return  "cliente/index";
-        }
+        
+        model.addAttribute("username", userDetails.getUsername());
+        return "index";
     }
     
     
-    @PostMapping(value = {"/registrazione"})
-	public String registerClient(@Valid @ModelAttribute("utente") Utente utente,
-	                             BindingResult utenteBindingResult,
-	                             @Valid @ModelAttribute("credentials") Credentials credentials,
-	                             @RequestParam("confermaPassword") String confermaPassword,
-	                             BindingResult credentialsBindingResult,
-	                             Model model) {
-    	
-	    
+    @PostMapping("/registrazione")
+    public String registerClient(@Valid @ModelAttribute("utente") Utente utente,
+                                 BindingResult utenteBindingResult,
+                                 @Valid @ModelAttribute("credentials") Credentials credentials,
+                                 BindingResult credentialsBindingResult,
+                                 Model model) {
 
+        // Controllo che la password e la conferma siano uguali
+        if (!credentials.getPassword().equals(credentials.getPasswordConfirm())) {
+            credentialsBindingResult.rejectValue("password", "error.credentials", "- Le password non coincidono");
+        }
 
-	    if (!credentials.getPassword().equals(confermaPassword)) {
-	        credentialsBindingResult.rejectValue("passwordConfirm", "error.credentials", "Le password non coincidono");
-	    }
+        // Se non ci sono errori, salvo le credenziali
+        if (!utenteBindingResult.hasErrors() && !credentialsBindingResult.hasErrors()) {
+            credentials.setUtente(utente);
+            credentials.setRuolo(Credentials.CLIENT_ROLE);
+            credentialsService.saveCredentials(credentials);
+            return "redirect:/login"; // o redirect se preferisci
+        }
 
-	    if (!utenteBindingResult.hasErrors() && !credentialsBindingResult.hasErrors()) {
-	        credentials.setUtente(utente);
-	        credentialsService.saveCredentials(credentials);
-	        model.addAttribute("utente", utente);
-	        return "registrationSuccessfull";
-	    }
+        // Se ci sono errori, torno alla pagina di registrazione
+        return "registrazione";
+    }
 
-	    
-	    if (credentialsBindingResult.hasFieldErrors("passwordConfirm")) {
-	        model.addAttribute("errorsPasswordConfirm", credentialsBindingResult.getFieldErrors("passwordConfirm")
-	            .stream()
-	            .map(err -> err.getDefaultMessage())
-	            .toList());
-	    }
-
-	    return "formRegistrazione";
-	}
 
     
     

@@ -9,6 +9,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 
@@ -26,6 +27,9 @@ public class Libro {
 	private int anno;
 	
 	private String copertina;
+	
+	@Lob
+	private byte[] immagine;
 	
 	@ManyToMany(mappedBy = "libri")
 	private List<Autore> autori;
@@ -59,6 +63,22 @@ public class Libro {
 	 */
 	public void setTitolo(String titolo) {
 		this.titolo = titolo;
+	}
+
+	
+	
+	/**
+	 * @return the immagine
+	 */
+	public byte[] getImmagine() {
+		return immagine;
+	}
+
+	/**
+	 * @param immagine the immagine to set
+	 */
+	public void setImmagine(byte[] immagine) {
+		this.immagine = immagine;
 	}
 
 	/**

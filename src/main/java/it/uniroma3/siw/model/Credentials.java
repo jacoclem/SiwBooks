@@ -10,6 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotBlank;
 
 @Entity
@@ -17,7 +18,7 @@ public class Credentials {
 
 	public static final String DEFAULT_ROLE = "DEFAULT";
 	public static final String ADMIN_ROLE = "ADMIN";
-	public static final String USER_ROLE = "USER";
+	public static final String CLIENT_ROLE = "CLIENT";
 	
 	
 	
@@ -26,16 +27,18 @@ public class Credentials {
 	private Long id;
 	
 	@Column(nullable = false)
-	@NotBlank
 	private String username;
 	
 	@Column(nullable = false)
-	@NotBlank
 	private String password;
+	
+	@Transient
+	private String passwordConfirm;
+	
+	
 	
 	
 	@Column(nullable = false)
-	@NotBlank
 	private String ruolo;
 	
 	@OneToOne(cascade = CascadeType.ALL)
@@ -53,6 +56,44 @@ public class Credentials {
 	 */
 	public void setId(Long id) {
 		this.id = id;
+	}
+	
+	
+	
+
+	/**
+	 * @return the passwordConfirm
+	 */
+	public String getPasswordConfirm() {
+		return passwordConfirm;
+	}
+
+	/**
+	 * @param passwordConfirm the passwordConfirm to set
+	 */
+	public void setPasswordConfirm(String passwordConfirm) {
+		this.passwordConfirm = passwordConfirm;
+	}
+
+	/**
+	 * @return the defaultRole
+	 */
+	public static String getDefaultRole() {
+		return DEFAULT_ROLE;
+	}
+
+	/**
+	 * @return the adminRole
+	 */
+	public static String getAdminRole() {
+		return ADMIN_ROLE;
+	}
+
+	/**
+	 * @return the clientRole
+	 */
+	public static String getClientRole() {
+		return CLIENT_ROLE;
 	}
 
 	/**
