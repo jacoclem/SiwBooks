@@ -42,14 +42,13 @@ public class LibroController {
 		
 		List<Autore> autori = (List<Autore>) autoreRepository.findAll();
 		
-		System.out.println("La dimensione di autori è: " + autori.size());
 		
 		model.addAttribute("libro", new Libro());
 		model.addAttribute("autori", autori);
 		return "/admin/aggiungiLibro";
 	}
 	
-	@PostMapping("/addLibro")
+	@PostMapping("/admin/addLibro")
 	public String aggiungiNuovoLibro(
 	    @ModelAttribute("libro") Libro libro, 
 	    BindingResult bindingResult,
@@ -121,7 +120,6 @@ public class LibroController {
 	    Map<Long, Double> medieVoti = new HashMap<>();
 	    Map<Long, Integer> countRecensioni = new HashMap<>();
 	    for (Libro libro : libri) {
-	    	System.out.println("DIMENSIONE AUTORI (1) **********************" + libro.getAutori().size());
 	        Double media = libroService.getMediaVotiById(libro.getId()); 
 	        Integer count = libroService.getNumRecensioni(libro.getId());
 	        medieVoti.put(libro.getId(), media);
@@ -134,4 +132,77 @@ public class LibroController {
 
 	    return "/catalogo";
     }
+    
+    
+    @GetMapping("/admin/eliminaLibro/{id}")
+    public String deleteLibro(@PathVariable Long id) {
+        Optional<Libro> optLibro = libroRepository.findById(id);
+        
+        if (optLibro.isPresent()) {
+            Libro libro = optLibro.get();
+
+            // Rimuovi il libro dalla lista dei libri di ogni autore
+            for (Autore autore : libro.getAutori()) {
+                autore.getLibri().remove(libro);
+                autoreRepository.save(autore); // aggiorna autore per persistere il cambiamento
+            }
+
+            // Ora puoi eliminare il libro in sicurezza
+            libroRepository.delete(libro);
+
+            return "redirect:/catalogoLibri";
+        } else {
+            throw new IllegalArgumentException("ID libro non valido: " + id);
+        }
+    }
+
+    
+    
+    
+    
+  //modifica libro GET
+    @GetMapping("/admin/modificaLibro/{id}")
+    public String modificaAutoQueryParam(@PathVariable Long id, Model model) {
+        Libro libro = libroRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("ID libro non valido: " + id));
+        model.addAttribute("libro", libro);
+        System.out.println(libro);
+        return "/admin/editLibro";
+    }
+
+
+    
+    
+    @PostMapping("/admin/modificaLibro")
+    public String modificalibro(
+            @ModelAttribute("libro") Libro libro,
+            @RequestParam("file") MultipartFile file) {
+
+        Optional<Libro> optLibro = libroRepository.findById(libro.getId());
+        if (optLibro.isPresent()) {
+            Libro existingLibro = optLibro.get();
+
+            existingLibro.setTitolo(libro.getTitolo());
+            existingLibro.setAnno(libro.getAnno());
+            existingLibro.setDescrizione(libro.getDescrizione());
+
+            if (file != null && !file.isEmpty()) {
+                try {
+                    existingLibro.setImmagine(file.getBytes());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    // eventualmente aggiungi messaggio di errore nel model
+                }
+            }
+
+            libroRepository.save(existingLibro);
+            return "redirect:/catalogoLibri";
+        } else {
+            throw new IllegalArgumentException("ID libro non valido: " + libro.getId());
+        }
+    }
+    
+    
+    
+    
 }

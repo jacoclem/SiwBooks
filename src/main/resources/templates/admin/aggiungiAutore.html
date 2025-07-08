@@ -78,6 +78,13 @@
 						                <p th:each="err : ${errorsGlobal}" th:text="${err}" class="text-danger"></p>
 						            </div>
 									
+									<div class="col-md-6">
+										<label>Nome</label>
+										<span th:if="${#fields.hasErrors('autore.nome')}" th:errors="*{autore.nome}"
+			                               th:style="'color:red'">
+			                           </span>
+					                  <input type="text" th:field="${autore.nome}" class="form-control" placeholder="Nome" required >
+					                </div>
 									
 					                <div class="col-md-6">
 										<label>Cognome</label>
@@ -87,13 +94,7 @@
 					                  <input type="text" th:field="${autore.cognome}" class="form-control" placeholder="Cognome" required >
 					                </div>
 
-									<div class="col-md-6">
-										<label>Nome</label>
-										<span th:if="${#fields.hasErrors('autore.nome')}" th:errors="*{autore.nome}"
-			                               th:style="'color:red'">
-			                           </span>
-					                  <input type="text" th:field="${autore.nome}" class="form-control" placeholder="Nome" required >
-					                </div>
+									
 
 									<div class="col-md-6">
 										<label>Data di nascita</label>

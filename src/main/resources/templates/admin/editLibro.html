@@ -67,9 +67,9 @@
 	<section id="menuLibri" class="menuLibri section light-background">
 
 		<div class="container pt-5">
-					<form th:action="@{/admin/addLibro}" enctype="multipart/form-data" method="post" class="login-form aos-init aos-animate" data-aos="fade-up" data-aos-delay="200">
+					<form th:action="@{/admin/modificaLibro}" enctype="multipart/form-data" method="post" class="login-form aos-init aos-animate" data-aos="fade-up" data-aos-delay="200">
 					              <div class="row gy-4">
-									<h2>Inserimento Libro</h2>
+									<h2>Modifica Libro</h2>
 									<div  th:if="${errorsGlobal != null}"  class="alert alert-danger" role="alert">
 									  <p th:each="err : ${errorsGlobal}" th:text="${err}" class="alert alert-danger"></p>
 									</div>
@@ -78,7 +78,7 @@
 						                <p th:each="err : ${errorsGlobal}" th:text="${err}" class="text-danger"></p>
 						            </div>
 									
-									
+									<input type="hidden" th:field="${libro.id}"/>
 					                <div class="col-md-6">
 										<label>Titolo</label>
 										<span th:if="${#fields.hasErrors('libro.titolo')}" th:errors="*{libro.titolo}"
@@ -97,28 +97,9 @@
 									
 									<div class="col-md-6">
 										<label for="immagine" class="form-label">Immagine</label>
-										          <input type="file" class="form-control" name="immagine" id="immagine" accept="image/*" />
+										          <input type="file" class="form-control" name="file" id="immagine" accept="image/*" />
 					                </div>
 									
-									<div class="col-md-6">
-										<label>Autore: <a th:href="@{/admin/aggiungiAutore}">clicca qui per aggiungere un autore</a> </label>
-										<select th:if="${autori != null and !autori.isEmpty()}"
-										        name="autore" class="form-control" required>
-										    <option th:each="autore : ${autori}" 
-										            th:value="${autore.id}" 
-										            th:text="${autore.nome} + ' ' + ${autore.cognome} + ' ' + ${autore.dataDiNascita} + ${(autore.dataDiMorte != null ? ' - ' + autore.dataDiMorte : '')}">
-										    </option>
-										</select>
-
-										<p th:if="${autori == null or autori.isEmpty()}">
-										    Nessun autore disponibile
-										</p>
-
-													
-												
-
-										
-					                </div>
 									
 									<div class="col-md-12">
 									    <label>Descrizione libro</label>
@@ -131,7 +112,7 @@
 									
 									<div class="col-12 text-center">
 
-						                  <button type="submit">Aggiungi Libro</button>
+						                  <button type="submit">Modifica Libro</button>
 						                </div>
 
 					              </div>

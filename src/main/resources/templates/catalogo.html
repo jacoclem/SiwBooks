@@ -90,10 +90,10 @@
 							
 			  	          <div class="col-xl-9 content mt-2">
 			  	           	<div class="col">
-								<h3 class="me-3"><span th:if="${not libro.autori.empty}" th:each="autore : ${libro.autori}"><span th:text="${autore.cognome} + ' ' + ${autore.nome}"></span></span> <span th:if="${libro.autori.empty}">Nessun autore inserito</span></h3>
-								<a sec:authorize="hasAuthority('ADMIN')"	th:href="@{/admin/listaAutori/{id}/(id=${libro.id})}" class="read-more2 btn-secondary pt-1 pb-1 ps-2 pe-2"><span>Modifica autori</span> <i class="bi bi-pencil-fill"></i></a>
-								<a sec:authorize="hasAuthority('ADMIN')"	th:href="@{/admin/editLibro/{id}/(id=${libro.id})}" class="read-more2 pt-1 pb-1 ps-2 pe-2"><span>Modifica dettagli</span> <i class="bi bi-pencil-square"></i></a>
-								<a sec:authorize="hasAuthority('ADMIN')"	th:href="@{/admin/delete/{id}/(id=${libro.id})}" class="read-more2 pt-1 pb-1 ps-2 pe-2"><span>Elimina libro</span> <i class="bi bi-trash-fill"></i></a>
+								<h3 class="me-3"><span th:if="${not libro.autori.empty}" th:each="autore : ${libro.autori}"><span th:text="${autore.nome} + ' ' + ${autore.cognome} + '; '"></span></span> <span th:if="${libro.autori.empty}">Nessun autore inserito</span></h3>
+								<a sec:authorize="hasAuthority('ADMIN')"	th:href="@{/admin/listaAutori/{id}(id=${libro.id})}" class="read-more2 btn-secondary pt-1 pb-1 ps-2 pe-2"><span>Modifica autori</span> <i class="bi bi-pencil-fill"></i></a>
+								<a sec:authorize="hasAuthority('ADMIN')"	th:href="@{/admin/modificaLibro/{id}(id=${libro.id})}" class="read-more2 pt-1 pb-1 ps-2 pe-2"><span>Modifica dettagli</span> <i class="bi bi-pencil-square"></i></a>
+								<a sec:authorize="hasAuthority('ADMIN')"	th:href="@{/admin/eliminaLibro/{id}(id=${libro.id})}" class="read-more2 pt-1 pb-1 ps-2 pe-2"><span>Elimina libro</span> <i class="bi bi-trash-fill"></i></a>
 							</div>
 			  	            <h2 th:text="${libro.titolo}"></h2>
 							<p th:text="${libro.descrizione}"></p>
