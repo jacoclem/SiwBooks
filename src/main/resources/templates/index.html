@@ -39,15 +39,8 @@
         <ul class="ms-5">
           <li><a th:href="@{/}" class="active">Home</a></li>
 		  <li><a th:href="@{/catalogoLibri}">Catalogo libri</a></li>
-		  <li><a th:href="@{/catalogoAutori}" >Lista autori</a></li>
-		  
-		  <li sec:authorize="hasAuthority('ADMIN')">
-  	        <a th:href="@{/admin/listaLibri}" class="nav-link">Gestisci Libri</a>
-  	      </li>
-		  
-		  <li sec:authorize="hasAuthority('ADMIN')">
-	        <a th:href="@{/admin/listaAutori}" class="nav-link">Gestisci Autori</a>
-	      </li>
+		  <li><a th:href="@{/catalogoAutori}" >Catalogo autori</a></li>
+
 		  
 		  <li sec:authorize="hasAuthority('CLIENT')">
   	        <a th:href="@{/client/listaRecensioni}" class="nav-link">Le mie recensioni</a>
