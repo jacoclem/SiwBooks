@@ -9,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotBlank;
@@ -23,7 +24,16 @@ public class Credentials {
 	
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	
+	@SequenceGenerator(
+	    name = "credentials_generator",
+	    sequenceName = "credentials_seq",
+	    allocationSize = 1
+	)
+	@GeneratedValue(
+	    strategy = GenerationType.SEQUENCE,
+	    generator = "credentials_generator"
+	)
 	private Long id;
 	
 	@Column(nullable = false)

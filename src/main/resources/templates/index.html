@@ -39,7 +39,7 @@
         <ul class="ms-5">
           <li><a th:href="@{/}" class="active">Home</a></li>
 		  <li><a th:href="@{/catalogoLibri}">Catalogo libri</a></li>
-		  <li><a th:href="@{/catalgoAutori}" >Lista autori</a></li>
+		  <li><a th:href="@{/catalogoAutori}" >Lista autori</a></li>
 		  
 		  <li sec:authorize="hasAuthority('ADMIN')">
   	        <a th:href="@{/admin/listaLibri}" class="nav-link">Gestisci Libri</a>

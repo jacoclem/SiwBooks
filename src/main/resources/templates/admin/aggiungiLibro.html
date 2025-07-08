@@ -107,6 +107,35 @@
 										          <input type="file" class="form-control" name="immagine" id="immagine" accept="image/*" />
 					                </div>
 									
+									<div class="col-md-6">
+										<label>Autore: <a th:href="@{/admin/aggiungiAutore}">clicca qui per aggiungere un autore</a> </label>
+										<select th:if="${autori != null and !autori.isEmpty()}"
+										        name="autore" class="form-control" required>
+										    <option th:each="autore : ${autori}" 
+										            th:value="${autore.id}" 
+										            th:text="${autore.nome} + ' ' + ${autore.cognome} + ' ' + ${autore.dataDiNascita} + ${(autore.dataDiMorte != null ? ' - ' + autore.dataDiMorte : '')}">
+										    </option>
+										</select>
+
+										<p th:if="${autori == null or autori.isEmpty()}">
+										    Nessun autore disponibile
+										</p>
+
+													
+												
+
+										
+					                </div>
+									
+									<div class="col-md-12">
+									    <label>Descrizione libro</label>
+									    <span th:if="${#fields.hasErrors('libro.descrizione')}" th:errors="*{libro.descrizione}"
+									          th:style="'color:red'">
+									    </span>
+									    <textarea th:field="${libro.descrizione}" class="form-control" placeholder="Inserisci una breve descrizione" rows="3" required></textarea>
+									</div>
+
+									
 									<div class="col-12 text-center">
 
 						                  <button type="submit">Aggiungi Libro</button>

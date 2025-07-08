@@ -4,10 +4,12 @@ import java.util.List;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import it.uniroma3.siw.model.Autore;
 import it.uniroma3.siw.model.Libro;
 
+@Repository
 public interface LibroRepository extends CrudRepository<Libro, Long>{
 
 	public List<Libro> findByTitolo(String titolo);

@@ -31,9 +31,7 @@ public class Autore {
 	private LocalDate dataDiMorte;
 	
 	@Column(nullable = false)
-	private String nazionalità;
-	
-	private String fotografia;
+	private String nazionalita;
 	
 	@ManyToMany
 	private List<Libro> libri;
@@ -111,30 +109,18 @@ public class Autore {
 	/**
 	 * @return the nazionalità
 	 */
-	public String getNazionalità() {
-		return nazionalità;
+	public String getNazionalita() {
+		return nazionalita;
 	}
 
 	/**
 	 * @param nazionalità the nazionalità to set
 	 */
-	public void setNazionalità(String nazionalità) {
-		this.nazionalità = nazionalità;
+	public void setNazionalita(String nazionalita) {
+		this.nazionalita = nazionalita;
 	}
 
-	/**
-	 * @return the fotografia
-	 */
-	public String getFotografia() {
-		return fotografia;
-	}
 
-	/**
-	 * @param fotografia the fotografia to set
-	 */
-	public void setFotografia(String fotografia) {
-		this.fotografia = fotografia;
-	}
 
 	/**
 	 * @return the libri
@@ -152,7 +138,7 @@ public class Autore {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(cognome, dataDiMorte, dataDiNascita, nazionalità, nome);
+		return Objects.hash(cognome, dataDiMorte, dataDiNascita, nazionalita, nome);
 	}
 
 	@Override
@@ -165,7 +151,7 @@ public class Autore {
 			return false;
 		Autore other = (Autore) obj;
 		return Objects.equals(cognome, other.cognome) && Objects.equals(dataDiMorte, other.dataDiMorte)
-				&& Objects.equals(dataDiNascita, other.dataDiNascita) && Objects.equals(nazionalità, other.nazionalità)
+				&& Objects.equals(dataDiNascita, other.dataDiNascita) && Objects.equals(nazionalita, other.nazionalita)
 				&& Objects.equals(nome, other.nome);
 	}
 	

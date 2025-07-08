@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>SiwBooks - Gestione Libri</title>
+  <title>SiwBooks - Gestione Autori</title>
 
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com" rel="preconnect">
@@ -39,7 +39,7 @@
 	        <ul class="ms-5">
 	          <li><a th:href="@{/}" >Home</a></li>
 			  <li><a th:href="@{/catalogoLibri}" class="active">Catalogo libri</a></li>
-			  <li><a th:href="@{/catalgoAutori}" >Catalogo autori</a></li>
+			  <li><a th:href="@{/catalogoAutori}" >Catalogo autori</a></li>
 			  
 			  <li sec:authorize="hasAuthority('ADMIN')">
 	  	        <a th:href="@{/admin/listaLibri}" class="nav-link">Gestisci Libri</a>
@@ -71,52 +71,73 @@
   <main class="main">
 
 
-	<section id="menuLibri" class="menuLibri section light-background" style="min-height: 100vh;">
+	<section id="menuLibri" class="menuLibri section light-background">
 
-	      <div class="container aos-init aos-animate" style="margin-top: 100px;" data-aos="fade-up" data-aos-delay="100">
-	        <div sec:authorize="hasAuthority('ADMIN')" class="row align-items-xl-center gy-5  p-2" style="background-color: rgb(238, 238, 238); border-radius: 30px;">
+		<div class="container pt-5">
+					<form th:action="@{/addAutore}" enctype="multipart/form-data" method="post" class="login-form aos-init aos-animate" data-aos="fade-up" data-aos-delay="200">
+					              <div class="row gy-4">
+									<h2>Inserimento Autore</h2>
+									<div  th:if="${errorsGlobal != null}"  class="alert alert-danger" role="alert">
+									  <p th:each="err : ${errorsGlobal}" th:text="${err}" class="alert alert-danger"></p>
+									</div>
+									
+									<div th:if="${errorsGlobal != null}" class="mb-3">
+						                <p th:each="err : ${errorsGlobal}" th:text="${err}" class="text-danger"></p>
+						            </div>
+									
+									
+					                <div class="col-md-6">
+										<label>Cognome</label>
+										<span th:if="${#fields.hasErrors('autore.cognome')}" th:errors="*{autore.cognome}"
+			                               th:style="'color:red'">
+			                           </span>
+					                  <input type="text" th:field="${autore.cognome}" class="form-control" placeholder="Cognome" required >
+					                </div>
 
-	          <div class="col-xl-12 content mt-2">
-	            <h3>Amministratore</h3>
-	            <h2>Menù di gestione libri di SiwBooks</h2>
-	            <p>Da questa schermata è possibile aggiungere, rimuovere e modificare i libri nella piattaforma.</p>
-	            <a th:href="@{/admin/aggiungiLibro}" class="read-more"><span>Aggiungi un nuovo libro</span><i class="bi bi-arrow-right"></i></a>
-	          </div>
-			</div>
-	
-		  
-		  <!-- Lista libri-->
-		  	        <div th:if="${libri.empty}" class="text-align-center mt-5 content" >
-						<h2>Nessun libro nel database</h2>
-					</div>
-					<div th:if ="${not libri.empty}">
-						<div th:each="libro : ${libri}" class="row align-items-xl-center gy-5 mt-5 p-2" style="border: lightgrey 1px solid ; border-radius: 30px;">
-							<div class="col-xl-3 content mt-2">
-								<img th:src="@{/libro/{id}/immagine(id=${libro.id})}" alt="Immagine libro" class="img-fluid ms-5" style="height: 300px;">
-							</div>
-							
-			  	          <div class="col-xl-9 content mt-2">
-			  	           	<div class="col">
-								<h3 class="me-3"><span th:if="${not libro.autori.empty}" th:each="autore : ${libro.autori}"><span th:text="${autore.cognome} + ' ' + ${autore.nome}"></span></span> <span th:if="${libro.autori.empty}">Nessun autore inserito</span></h3>
-								<a sec:authorize="hasAuthority('ADMIN')"	th:href="@{/admin/listaAutori/{id}/(id=${libro.id})}" class="read-more2 btn-secondary pt-1 pb-1 ps-2 pe-2"><span>Modifica autori</span> <i class="bi bi-pencil-fill"></i></a>
-								<a sec:authorize="hasAuthority('ADMIN')"	th:href="@{/admin/editLibro/{id}/(id=${libro.id})}" class="read-more2 pt-1 pb-1 ps-2 pe-2"><span>Modifica dettagli</span> <i class="bi bi-pencil-square"></i></a>
-								<a sec:authorize="hasAuthority('ADMIN')"	th:href="@{/admin/delete/{id}/(id=${libro.id})}" class="read-more2 pt-1 pb-1 ps-2 pe-2"><span>Elimina libro</span> <i class="bi bi-trash-fill"></i></a>
-							</div>
-			  	            <h2 th:text="${libro.titolo}"></h2>
-							<p th:text="${libro.descrizione}"></p>
-			  	            <p >Anno pubblicazione: <span th:text="${libro.anno}"></span></p>
-							<h3 class="me-3" >Valutazione: <span th:text="${medieVoti[libro.id]}">-</span> /5  <i class="bi bi-star-fill"></i></h3>
-			  	            <a 	th:href="@{/recensioni/{id}/(id=${libro.id})}" class="read-more "><span>Vedi tutte le recensioni</span> (<span th:text="${numRecensioni[libro.id]}">0</span>) <i class="bi bi-arrow-right"></i></a>
-			  	          </div>
-						  
-						  
-						  
-		  	        	</div>
-					</div>
-					
-					
-					
-					</div>
+									<div class="col-md-6">
+										<label>Nome</label>
+										<span th:if="${#fields.hasErrors('autore.nome')}" th:errors="*{autore.nome}"
+			                               th:style="'color:red'">
+			                           </span>
+					                  <input type="text" th:field="${autore.nome}" class="form-control" placeholder="Nome" required >
+					                </div>
+
+									<div class="col-md-6">
+										<label>Data di nascita</label>
+										<span th:if="${#fields.hasErrors('autore.dataDiNascita')}" th:errors="*{autore.dataDiNascita}"
+			                               th:style="'color:red'">
+			                           </span>
+					                  <input type="date" th:field="${autore.dataDiNascita}" class="form-control" placeholder="Data di nascita" required >
+					                </div>
+									
+									<div class="col-md-6">
+										<label>Data di morte (opzionale)</label>
+										<span th:if="${#fields.hasErrors('autore.dataDiMorte')}" th:errors="*{autore.dataDiMorte}"
+			                               th:style="'color:red'">
+			                           </span>
+					                  <input type="date" th:field="${autore.dataDiMorte}" class="form-control" placeholder="Data di morte" >
+					                </div>
+									
+									<div class="col-md-6">
+										<label>Nazione di nascita</label>
+										<span th:if="${#fields.hasErrors('autore.nazionalita')}" th:errors="*{autore.nazionalita}"
+			                               th:style="'color:red'">
+			                           </span>
+					                  <input type="text" th:field="${autore.nazionalita}" class="form-control" placeholder="Nazionalità" required >
+					                </div>								
+									
+
+									
+									<div class="col-12 text-center">
+
+						                  <button type="submit">Aggiungi Autore</button>
+						                </div>
+
+					              </div>
+					            </form>
+
+				</div>
+	      
 	    </section>
 
   </main>

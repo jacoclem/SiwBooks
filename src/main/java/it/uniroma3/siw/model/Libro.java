@@ -25,8 +25,9 @@ public class Libro {
 	
 	@Column(nullable = false)
 	private int anno;
-	
-	private String copertina;
+
+	@Column(nullable = false)
+	private String descrizione;
 	
 	@Lob
 	private byte[] immagine;
@@ -98,15 +99,15 @@ public class Libro {
 	/**
 	 * @return the copertina
 	 */
-	public String getCopertina() {
-		return copertina;
+	public String getDescrizione() {
+		return descrizione;
 	}
 
 	/**
 	 * @param copertina the copertina to set
 	 */
-	public void setCopertina(String copertina) {
-		this.copertina = copertina;
+	public void setDescrizione(String descrizione) {
+		this.descrizione = descrizione;
 	}
 
 	/**
