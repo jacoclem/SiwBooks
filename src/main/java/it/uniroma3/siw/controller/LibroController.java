@@ -26,6 +26,7 @@ import it.uniroma3.siw.model.Libro;
 import it.uniroma3.siw.repository.AutoreRepository;
 import it.uniroma3.siw.repository.LibroRepository;
 import it.uniroma3.siw.service.LibroService;
+import jakarta.transaction.Transactional;
 
 @Controller
 public class LibroController {
@@ -36,7 +37,9 @@ public class LibroController {
 	
 	
 	
-	
+	/*
+	 * Funzione chet che restituisce il form per aggiungere un libro, aggiunge come parametro anche tutti gli autori
+	 */
 	@GetMapping(value = "/admin/aggiungiLibro")
 	public String getFormAddBook(Model model) {
 		
@@ -48,6 +51,10 @@ public class LibroController {
 		return "/admin/aggiungiLibro";
 	}
 	
+	
+	/*
+	 * Funzione Post che aggiunge un libro al catalogo
+	 */
 	@PostMapping("/admin/addLibro")
 	public String aggiungiNuovoLibro(
 	    @ModelAttribute("libro") Libro libro, 
@@ -99,7 +106,9 @@ public class LibroController {
 	}
 
 	
-	 // Restituisce immagine dell'auto
+	/*
+	 * Funzione che restituisce l'immagine del libro
+	 */
     @GetMapping("/libro/{id}/immagine")
     public ResponseEntity<byte[]> getImmagine(@PathVariable Long id) {
         Libro libro = libroRepository.findById(id).orElse(null);
@@ -112,6 +121,9 @@ public class LibroController {
     }
     
     
+    /*
+     * Funzione get che restituisce la pagina del catalogo dei libri
+     */
     @GetMapping("/catalogoLibri")
     public String getLibri(Model model) {
 		List<Libro> libri = (List<Libro>) libroRepository.findAll();
@@ -134,6 +146,34 @@ public class LibroController {
     }
     
     
+    /*
+     * Funzione che restituisce i libri che contengono una o più parole della ricerca
+     */
+    @Transactional
+    @PostMapping("/search")
+    public String showBookForTitle(Model model, @RequestParam("ricerca") String search) {
+    	
+    	List<Libro> libri =  libroService.getLibroByTitolo(search);
+    	
+    	Map<Long, Double> medieVoti = new HashMap<>();
+	    Map<Long, Integer> countRecensioni = new HashMap<>();
+	    for (Libro libro : libri) {
+	        Double media = libroService.getMediaVotiById(libro.getId()); 
+	        Integer count = libroService.getNumRecensioni(libro.getId());
+	        medieVoti.put(libro.getId(), media);
+	        countRecensioni.put(libro.getId(), count);
+	    }
+
+	    model.addAttribute("libri", libri);
+	    model.addAttribute("medieVoti", medieVoti);
+	    model.addAttribute("numRecensioni", countRecensioni);
+    	return "/catalogo";
+    }
+    
+    
+    /*
+     * Funzioen che elimina un libro
+     */
     @GetMapping("/admin/eliminaLibro/{id}")
     public String deleteLibro(@PathVariable Long id) {
         Optional<Libro> optLibro = libroRepository.findById(id);
@@ -160,7 +200,9 @@ public class LibroController {
     
     
     
-  //modifica libro GET
+    /*
+     * Funzione get per la modifica un libro
+     */
     @GetMapping("/admin/modificaLibro/{id}")
     public String modificaAutoQueryParam(@PathVariable Long id, Model model) {
         Libro libro = libroRepository.findById(id)
@@ -172,7 +214,9 @@ public class LibroController {
 
 
     
-    
+    /*
+     * Funzione post che modifica un libro
+     */
     @PostMapping("/admin/modificaLibro")
     public String modificalibro(
             @ModelAttribute("libro") Libro libro,
@@ -202,6 +246,126 @@ public class LibroController {
         }
     }
     
+    
+    /*
+     * Funzione get che restituisce la lista di autori da aggiungere ad un libro
+     */
+    @GetMapping("admin/listaAutori/{id}")
+    public String getAutoriDisponibili(@PathVariable Long id, Model model) {
+    	
+    	Optional<Libro> libroOptional = this.libroRepository.findById(id);
+    	
+    	if(!libroOptional.isPresent())
+    		return "/";
+    	
+    	Libro libro = libroOptional.get();
+    	
+    	List<Autore> autoriDelLibro = libro.getAutori();
+    	
+    	List<Autore> autori = (List<Autore>) this.autoreRepository.findAll();
+    	
+    	model.addAttribute("autoriDelLibro", autoriDelLibro);
+    	
+    	model.addAttribute("autori", autori);
+    	
+    	model.addAttribute("libroId", id);
+    	model.addAttribute("libroTitolo", libro.getTitolo());
+    	
+    	return "/admin/listaAutoriDaAggiungere";
+    }
+    
+    /*
+     * Funzione post che rimuove un autore dalla lista di autori di un libro
+     */
+    @Transactional
+    @PostMapping("admin/rimuoviAutore")
+    public String removeAutore(@RequestParam("autoreId") Long autoreId, @RequestParam("libroId") Long libroId) {
+        Optional<Libro> optionalLibro = libroRepository.findById(libroId);
+        Optional<Autore> optionalAutore = autoreRepository.findById(autoreId);
+
+        if (optionalLibro.isPresent() && optionalAutore.isPresent()) {
+            Libro libro = optionalLibro.get();
+            Autore autore = optionalAutore.get();
+
+            if (libro.getAutori().contains(autore)) {
+                libro.getAutori().remove(autore);
+            }
+
+            if (autore.getLibri().contains(libro)) {
+                autore.getLibri().remove(libro);
+            }
+
+            libroRepository.save(libro);
+            autoreRepository.save(autore); // salva il lato inverso
+        }
+
+        return "redirect:/admin/listaAutori/" + libroId;
+    }
+
+    
+    /*
+     * Funzione post che aggiunge un autore ad un libro
+     */
+    @Transactional
+    @PostMapping("admin/aggiungiAutore")
+    public String aggiungiAutore(@RequestParam("autoreId") Long autoreId, @RequestParam("libroId") Long libroId) {
+        Optional<Libro> optionalLibro = libroRepository.findById(libroId);
+        Optional<Autore> optionalAutore = autoreRepository.findById(autoreId);
+
+        if (optionalLibro.isPresent() && optionalAutore.isPresent()) {
+            Libro libro = optionalLibro.get();
+            Autore autore = optionalAutore.get();
+
+            if (!libro.getAutori().contains(autore)) {
+                libro.getAutori().add(autore);
+            }
+
+            if (!autore.getLibri().contains(libro)) {
+                autore.getLibri().add(libro);
+            }
+
+            libroRepository.save(libro);
+            autoreRepository.save(autore); // necessario per mantenere in sync il lato inverso
+        }
+
+        return "redirect:/admin/listaAutori/" + libroId;
+    }
+
+
+    
+    /*
+     * Funzione get che restituisce tutti i libri di un autore
+     */
+    @Transactional
+    @GetMapping("/libriAutore/{id}/")
+    public String getLibriAutore(@PathVariable Long id, Model model) {
+        Optional<Autore> optionalAutore = this.autoreRepository.findById(id);
+
+        if (optionalAutore.isEmpty()) {
+            return "redirect:/catalogoAutori"; // oppure una pagina di errore personalizzata
+        }
+
+        Autore autore = optionalAutore.get();
+        List<Libro> libri = autore.getLibri();
+
+        // Calcolo media voti e numero recensioni per ogni libro
+        Map<Long, Double> medieVoti = new HashMap<>();
+        Map<Long, Integer> countRecensioni = new HashMap<>();
+        for (Libro libro : libri) {
+            Double media = libroService.getMediaVotiById(libro.getId());
+            Integer count = libroService.getNumRecensioni(libro.getId());
+            medieVoti.put(libro.getId(), media);
+            countRecensioni.put(libro.getId(), count);
+        }
+
+        model.addAttribute("libri", libri);
+        model.addAttribute("medieVoti", medieVoti);
+        model.addAttribute("numRecensioni", countRecensioni);
+
+        return "/catalogo"; // senza slash iniziale
+    }
+
+
     
     
     

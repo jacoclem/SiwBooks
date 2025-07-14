@@ -37,9 +37,9 @@
 
 	      <nav id="navmenu" class="navmenu">
 	        <ul class="ms-5">
-	          <li><a th:href="@{/}" class="active">Home</a></li>
+	          <li><a th:href="@{/}" >Home</a></li>
 			  <li><a th:href="@{/catalogoLibri}">Catalogo libri</a></li>
-			  <li><a th:href="@{/catalogoAutori}" >Catalogo autori</a></li>
+			  <li><a th:href="@{/catalogoAutori}" class="active">Catalogo autori</a></li>
 
 			  
 			  <li sec:authorize="hasAuthority('CLIENT')">

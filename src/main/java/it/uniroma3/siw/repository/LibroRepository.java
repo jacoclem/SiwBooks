@@ -12,9 +12,11 @@ import it.uniroma3.siw.model.Libro;
 @Repository
 public interface LibroRepository extends CrudRepository<Libro, Long>{
 
-	public List<Libro> findByTitolo(String titolo);
+	List<Libro> findByTitoloContainingIgnoreCase(String titolo);
 	
 	//public List<Libro> findByAutori(Autore autori); potrebbe dare problemi in quanto sono una lista di autori
 	
 	public List<Libro> findByAnno(int anno);
+	
+		
 }

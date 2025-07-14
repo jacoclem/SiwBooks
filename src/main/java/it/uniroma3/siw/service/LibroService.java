@@ -21,7 +21,7 @@ public class LibroService {
 	}
 	
 	public List<Libro> getLibroByTitolo(String titolo) {
-		return libroRepository.findByTitolo(titolo);
+		return libroRepository.findByTitoloContainingIgnoreCase(titolo);
 	}
 	
 	public Libro save(Libro libro) {
@@ -70,4 +70,6 @@ public class LibroService {
 		return recensioni.size();
 		
 	}
+	
+
 }

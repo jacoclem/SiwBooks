@@ -76,7 +76,9 @@
             <p data-aos="fade-up" data-aos-delay="200">Cerca le recensioni dei tuoi libri più amati</p>
           </div>
           <div class="col-lg-5" data-aos="fade-up" data-aos-delay="300">
-            <form action="" method="post" class="php-email-form">
+           
+
+			 <form th:action="@{/search}" th:method="POST" >
               <div class="sign-up-form"><input type="text" placeholder="Inserisci qui il titolo del libro che stai cercando" name="ricerca"><input type="submit" value="Cerca"></div>
               
             </form>
