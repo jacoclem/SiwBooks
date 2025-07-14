@@ -80,7 +80,8 @@
 
 			 <form th:action="@{/search}" th:method="POST" >
               <div class="sign-up-form"><input type="text" placeholder="Inserisci qui il titolo del libro che stai cercando" name="ricerca"><input type="submit" value="Cerca"></div>
-              
+              <input type="hidden" name="starMin" value="0">
+			  <input type="hidden" name="starMax" value="5">
             </form>
           </div>
         </div>

@@ -63,10 +63,77 @@
 
   <main class="main">
 
-
+	<div class="row">
+		
+		
+	</div>
 	<section id="menuLibri" class="menuLibri section light-background" style="min-height: 100vh;">
 
 	      <div class="container aos-init aos-animate" style="margin-top: 100px;" data-aos="fade-up" data-aos-delay="100">
+			
+			<form th:action="@{/search}" th:method="POST">
+			  <div class="row align-items-end">
+
+			    <!-- Campo testo per il titolo -->
+			    <div class="col-md-6 col-lg-5 mb-3 me-3 ">
+			      <div class="sign-up-form">
+			        <input type="text" class="form-control" placeholder="Inserisci qui il titolo del libro" name="ricerca" th:value="${ricerca}">
+			      </div>
+			    </div>
+
+			    <!-- Stelle minime -->
+			    <div class="col-md-3 col-lg-2 mb-3 me-3 ms-3">
+			      <label class="form-label">Stelle minime:</label>
+				  <input type="range" class="form-range" name="starMin" min="0" max="5" step="1" th:value="${starMin != null ? starMin : 0}" id="customRangeMin">
+	             	<output for="customRangeMin" id="rangeMinValue" aria-hidden="true">0</output>
+			    </div>
+
+
+			    <!-- Stelle massime -->
+			    <div class="col-md-3 col-lg-2 mb-3 me-3 ms-3">
+			      <label class="form-label">Stelle massime:</label>
+				  <input type="range" class="form-range" name="starMax" min="0" max="5" step="0" th:value="${starMax != null ? starMax : 5}" id="customRangeMax">
+             		<output for="customRangeMax" id="rangeMaxValue" aria-hidden="true">5</output>
+			    </div>
+
+				<script>
+	             const rangeMin = document.getElementById('customRangeMin');
+	             const rangeMax = document.getElementById('customRangeMax');
+	             const rangeMinValue = document.getElementById('rangeMinValue');
+	             const rangeMaxValue = document.getElementById('rangeMaxValue');
+
+	             rangeMinValue.textContent = rangeMin.value;
+	             rangeMaxValue.textContent = rangeMax.value;
+
+	             rangeMin.addEventListener('input', function() {
+	               rangeMinValue.textContent = this.value;
+	               if (parseInt(rangeMin.value) > parseInt(rangeMax.value)) {
+	                 rangeMin.value = rangeMax.value;
+	                 rangeMinValue.textContent = rangeMaxValue.textContent;
+	               }
+	             });
+	             rangeMax.addEventListener('input', function() {
+	               rangeMaxValue.textContent = this.value;
+	               if (parseInt(rangeMax.value) < parseInt(rangeMin.value)) {
+	                 rangeMax.value = rangeMin.value;
+	                 rangeMaxValue.textContent = rangeMinValue.textContent;
+	               }
+	             });
+	           </script>
+				
+			    <!-- Pulsante Applica -->
+			    <div class="col-md-3 col-lg-2 mb-4  ms-3">
+			      <input type="submit" class="redbutton" value="Applica">
+			    </div>
+				
+				
+				
+			  </div>
+			</form>
+
+			
+			
+		
 	        <div sec:authorize="hasAuthority('ADMIN')" class="row align-items-xl-center gy-5  p-2" style="background-color: rgb(238, 238, 238); border-radius: 30px;">
 
 	          <div class="col-xl-12 content mt-2">
@@ -80,7 +147,7 @@
 		  
 		  <!-- Lista libri-->
 		  	        <div th:if="${libri.empty}" class="text-align-center mt-5 content" >
-						<h2>Nessun libro nel database</h2>
+						<h2>Nessun libro trovato per i parametri inseriti</h2>
 					</div>
 					<div th:if ="${not libri.empty}">
 						<div th:each="libro : ${libri}" class="row align-items-xl-center gy-5 mt-5 p-2" style="border: lightgrey 1px solid ; border-radius: 30px;">
@@ -98,7 +165,12 @@
 			  	            <h2 th:text="${libro.titolo}"></h2>
 							<p th:text="${libro.descrizione}"></p>
 			  	            <p >Anno pubblicazione: <span th:text="${libro.anno}"></span></p>
-							<h3 class="me-3" >Valutazione: <span th:text="${medieVoti[libro.id]}">-</span> /5  <i class="bi bi-star-fill"></i></h3>
+							<h3 class="me-3">
+							  Valutazione: 
+							  <span th:text="${medieVoti[libro.id] != null and medieVoti[libro.id] != 0} ? ${#numbers.formatDecimal(medieVoti[libro.id], 1, 'POINT')} : '-'"></span>
+							  /5 <i class="bi bi-star-fill"></i>
+							</h3>
+
 			  	            <a 	th:href="@{/recensioni/{id}/(id=${libro.id})}" class="read-more "><span>Vedi tutte le recensioni</span> (<span th:text="${numRecensioni[libro.id]}">0</span>) <i class="bi bi-arrow-right"></i></a>
 			  	          </div>
 						  

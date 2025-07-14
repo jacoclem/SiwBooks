@@ -101,7 +101,7 @@ public class LibroController {
 	    this.autoreRepository.save(autore);
 
 	   
-
+	    
 	    return "redirect:/catalogoLibri";
 	}
 
@@ -151,24 +151,39 @@ public class LibroController {
      */
     @Transactional
     @PostMapping("/search")
-    public String showBookForTitle(Model model, @RequestParam("ricerca") String search) {
-    	
-    	List<Libro> libri =  libroService.getLibroByTitolo(search);
-    	
-    	Map<Long, Double> medieVoti = new HashMap<>();
-	    Map<Long, Integer> countRecensioni = new HashMap<>();
-	    for (Libro libro : libri) {
-	        Double media = libroService.getMediaVotiById(libro.getId()); 
-	        Integer count = libroService.getNumRecensioni(libro.getId());
-	        medieVoti.put(libro.getId(), media);
-	        countRecensioni.put(libro.getId(), count);
-	    }
+    public String showBookForTitle(Model model,
+                                   @RequestParam("ricerca") String search,
+                                   @RequestParam("starMin") int starMin,
+                                   @RequestParam("starMax") int starMax) {
 
-	    model.addAttribute("libri", libri);
-	    model.addAttribute("medieVoti", medieVoti);
-	    model.addAttribute("numRecensioni", countRecensioni);
-    	return "/catalogo";
+        List<Libro> libriTrovati = libroService.getLibroByTitolo(search);
+
+        List<Libro> libriFiltrati = new ArrayList<>();
+        Map<Long, Double> medieVoti = new HashMap<>();
+        Map<Long, Integer> countRecensioni = new HashMap<>();
+
+        for (Libro libro : libriTrovati) {
+            Double media = libroService.getMediaVotiById(libro.getId());
+            Integer count = libroService.getNumRecensioni(libro.getId());
+
+            if (media == null) media = 0.0; // Protezione da null
+            if (media >= starMin && media <= starMax) {
+                libriFiltrati.add(libro);
+                medieVoti.put(libro.getId(), media);
+                countRecensioni.put(libro.getId(), count);
+            }
+        }
+
+        model.addAttribute("libri", libriFiltrati);
+        model.addAttribute("medieVoti", medieVoti);
+        model.addAttribute("numRecensioni", countRecensioni);
+        model.addAttribute("ricerca", search);
+        model.addAttribute("starMin", starMin);
+        model.addAttribute("starMax", starMax);
+
+        return "catalogo"; // Rimuovi lo slash iniziale se usi Thymeleaf
     }
+
     
     
     /*
