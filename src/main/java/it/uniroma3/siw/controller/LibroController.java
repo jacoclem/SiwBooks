@@ -133,6 +133,9 @@ public class LibroController {
 	    Map<Long, Integer> countRecensioni = new HashMap<>();
 	    for (Libro libro : libri) {
 	        Double media = libroService.getMediaVotiById(libro.getId()); 
+	        if(media==null) {
+	        	media = 0.0;
+	        }
 	        Integer count = libroService.getNumRecensioni(libro.getId());
 	        medieVoti.put(libro.getId(), media);
 	        countRecensioni.put(libro.getId(), count);

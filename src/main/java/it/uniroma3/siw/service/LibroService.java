@@ -33,27 +33,35 @@ public class LibroService {
 	}
 	
 	public Double getMediaVotiById(Long id) {
-		Optional<Libro> libroOptional = libroRepository.findById(id);
-		
-		if (libroOptional.isEmpty()) {
-			return 0.0;
-		}
-		
-		Libro  libro = libroOptional.get();
-		
-		List<Recensione> recensioni = libro.getRecensioni();
-		
-		if (recensioni == null || recensioni.isEmpty()) {
-			return 0.0;
-		}
-		
+	    Optional<Libro> libroOptional = libroRepository.findById(id);
+
+	    if (libroOptional.isEmpty()) {
+	        return 0.0;
+	    }
+
+	    Libro libro = libroOptional.get();
+	    List<Recensione> recensioni = libro.getRecensioni();
+
+	    if (recensioni == null || recensioni.isEmpty()) {
+	        return 0.0;
+	    }
+
+	    // Calcolo somma e conteggio (tutti i voti sono validi, perché int non può essere null)
 	    double somma = recensioni.stream()
-                .mapToDouble(Recensione::getVoto)
-                .sum();
-	    
-	    return somma / recensioni.size();
-		
+	        .mapToInt(Recensione::getVoto)  // usa mapToInt visto che è int
+	        .sum();
+
+	    int count = recensioni.size();
+
+	    // Evito divisione per zero (anche se controllato sopra)
+	    if (count == 0) {
+	        return 0.0;
+	    }
+
+	    Double media = somma / count;
+	    return media;
 	}
+
 	
 	
 	public int getNumRecensioni(Long id) {
