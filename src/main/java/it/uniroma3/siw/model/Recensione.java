@@ -30,7 +30,8 @@ public class Recensione {
 	private Libro libro;
 	
 	@ManyToOne(optional = true)
-	private Utente utente;
+	private Credentials utenteCredentials;
+	
 
 	/**
 	 * @return the id
@@ -103,22 +104,22 @@ public class Recensione {
 	}
 
 	/**
-	 * @return the utente
+	 * @return the utenteCredentials
 	 */
-	public Utente getUtente() {
-		return utente;
+	public Credentials getUtenteCredentials() {
+		return utenteCredentials;
 	}
 
 	/**
-	 * @param utente the utente to set
+	 * @param utenteCredentials the utenteCredentials to set
 	 */
-	public void setUtente(Utente utente) {
-		this.utente = utente;
+	public void setUtenteCredentials(Credentials utenteCredentials) {
+		this.utenteCredentials = utenteCredentials;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(libro, testo, titolo, utente, voto);
+		return Objects.hash(testo, titolo, voto);
 	}
 
 	@Override
@@ -130,10 +131,9 @@ public class Recensione {
 		if (getClass() != obj.getClass())
 			return false;
 		Recensione other = (Recensione) obj;
-		return Objects.equals(libro, other.libro) && Objects.equals(testo, other.testo)
-				&& Objects.equals(titolo, other.titolo) && Objects.equals(utente, other.utente) && voto == other.voto;
+		return Objects.equals(testo, other.testo) && Objects.equals(titolo, other.titolo) && voto == other.voto;
 	}
-	
+
 	
 	
 	

@@ -17,7 +17,8 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import static it.uniroma3.siw.model.Credentials.ADMIN_ROLE;
-//import static it.uniroma3.siw.model.Credentials.DEFAULT_ROLE;
+import static it.uniroma3.siw.model.Credentials.CLIENT_ROLE;
+
 @Configuration
 @EnableWebSecurity
 
@@ -40,17 +41,21 @@ public class AuthConfiguration{
 	
 	@Bean
 	protected SecurityFilterChain configure(final HttpSecurity httpSecurity) throws Exception {
-		httpSecurity.csrf().and().cors().disable()
+		//httpSecurity.csrf().and().cors().disable()
+		httpSecurity.csrf().disable().cors().disable()
 		.authorizeHttpRequests()
 		//.requestMatchers("/**").permitAll()
 		
 		//CHIUNQUE PUO' ACCEDERE
-		.requestMatchers(HttpMethod.GET, "/", "/index", "/registrazione", "/login", "/css/**", "/img/**","/libro/**", "/js/**", "/vendor/**", "/favicon.ico", "/catalogoLibri", "/catalogoAutori", "/libriAutore/**").permitAll()
+		.requestMatchers(HttpMethod.GET, "/", "/index", "/registrazione", "/login", "/css/**", "/img/**","/libro/**", "/js/**", "/vendor/**", "/favicon.ico", "/catalogoLibri", "/catalogoAutori", "/libriAutore/**", "/recensioni/**").permitAll()
 		.requestMatchers(HttpMethod.POST,"/registrazione", "/login", "/search").permitAll()
 		
 		
 		.requestMatchers(HttpMethod.GET,"/admin/**").hasAnyAuthority(ADMIN_ROLE)
 		.requestMatchers(HttpMethod.POST,"/admin/**").hasAnyAuthority(ADMIN_ROLE)
+		
+		.requestMatchers(HttpMethod.GET,"/client/**").hasAnyAuthority(CLIENT_ROLE)
+		.requestMatchers(HttpMethod.POST,"/client/**").hasAnyAuthority(CLIENT_ROLE)
 		
 		
 		// tutti gli utenti autenticati possono accere alle pagine rimanenti 

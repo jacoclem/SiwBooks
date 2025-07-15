@@ -1,4 +1,5 @@
 package it.uniroma3.siw.model;
+import java.util.List;
 import java.util.Objects;
 
 import jakarta.persistence.CascadeType;
@@ -53,6 +54,10 @@ public class Credentials {
 	
 	@OneToOne(cascade = CascadeType.ALL)
 	private Utente utente;
+	
+	@OneToMany(mappedBy = "utenteCredentials")
+	private List<Recensione> recensioni;
+
 
 	/**
 	 * @return the id
@@ -164,11 +169,29 @@ public class Credentials {
 	}
 
 
+	
+	
+	/**
+	 * @return the recensioni
+	 */
+	public List<Recensione> getRecensioni() {
+		return recensioni;
+	}
+
+	/**
+	 * @param recensioni the recensioni to set
+	 */
+	public void setRecensioni(List<Recensione> recensioni) {
+		this.recensioni = recensioni;
+	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(ruolo, username);
 	}
 
+	
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)

@@ -134,7 +134,7 @@
 			
 			
 		
-	        <div sec:authorize="hasAuthority('ADMIN')" class="row align-items-xl-center gy-5  p-2" style="background-color: rgb(238, 238, 238); border-radius: 30px;">
+	        <div sec:authorize="hasAuthority('ADMIN')" class="row align-items-xl-center gy-5 mt-3 p-2" style="background-color: rgb(238, 238, 238); border-radius: 30px;">
 
 	          <div class="col-xl-12 content mt-2">
 	            <h3>Amministratore</h3>
@@ -164,7 +164,7 @@
 							</div>
 			  	            <h2 th:text="${libro.titolo}"></h2>
 							<p th:text="${libro.descrizione}"></p>
-			  	            <p >Anno pubblicazione: <span th:text="${libro.anno}"></span></p>
+			  	            <p>Anno pubblicazione: <span th:text="${libro.anno}"></span></p>
 							<h3 class="me-3">
 							  Valutazione: 
 							  <span th:text="${medieVoti[libro.id] != null and medieVoti[libro.id] != 0} ? ${#numbers.formatDecimal(medieVoti[libro.id], 1, 'POINT')} : '-'"></span>

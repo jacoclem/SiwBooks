@@ -51,8 +51,6 @@ public class Utente {
 	private LocalDate dataDiNascita;
 
 	
-	@OneToMany(mappedBy = "utente")
-	private List<Recensione> recensioni;
 
 
 
@@ -137,21 +135,6 @@ public class Utente {
 
 
 
-	/**
-	 * @return the recensioni
-	 */
-	public List<Recensione> getRecensioni() {
-		return recensioni;
-	}
-
-
-
-	/**
-	 * @param recensioni the recensioni to set
-	 */
-	public void setRecensioni(List<Recensione> recensioni) {
-		this.recensioni = recensioni;
-	}
 
 
 
