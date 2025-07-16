@@ -929,6 +929,14 @@ h6 {
   padding-left: 40px;
 }
 
+.commento {
+	background-color: #fff;
+	padding: 15px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+	border-radius: 25px; 
+}
+
+
 /*--------------------------------------------------------------
 # Comment Form Section
 --------------------------------------------------------------*/

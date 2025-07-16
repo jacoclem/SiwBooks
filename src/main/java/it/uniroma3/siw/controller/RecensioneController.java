@@ -2,8 +2,11 @@ package it.uniroma3.siw.controller;
 
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.Authentication;
@@ -67,7 +70,15 @@ public class RecensioneController {
     			
     			}
     		
+    		List<Libro> altriLibri = (List<Libro>) this.libroRepository.findAll();
     		
+    		altriLibri = altriLibri.stream().filter(l -> !l.getId().equals(id)).collect(Collectors.toList());
+    		
+    		Collections.shuffle(altriLibri);
+    		
+    		List<Libro> suggeriti = altriLibri.stream().limit(3).collect(Collectors.toList());
+    		
+    		model.addAttribute("suggeriti", suggeriti);
     		model.addAttribute("haGiaRecensito", haGiaRecensito);
     		model.addAttribute("newRecensione", new Recensione());
     		model.addAttribute("libro", libro);
