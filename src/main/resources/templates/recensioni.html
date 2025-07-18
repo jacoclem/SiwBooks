@@ -84,7 +84,26 @@
 					<img th:src="@{/libro/{id}/immagine(id=${libro.id})}" alt="Immagine libro" class="img-fluid ms-5" style="height: 300px;">
 				</div>
 
-                <h2 class="title" th:text="${libro.titolo}"></h2>
+				<!--<div class="menuLibri content mt-1">
+					<a th:text="${libro.titolo}" class="me-2"></a>
+					<h3 class="me-3">
+											  
+						  <span th:text="${media}"></span>
+
+						  /5 <i class="bi bi-star-fill"></i>
+						</h3>
+				</div>-->
+				
+				<div class="menuLibri content mt-1">
+					<h2 class="title mb-0" th:text="${libro.titolo}"></h2>
+					<h3 class="me-3 mt-2">
+						Valutazione: 
+						  <span th:if="${(media != null and media != 0)}" th:text="${media}"></span>
+						  <span th:unless="${(media != null and mmedia != 0)}">-</span>
+
+						  /5 <i class="bi bi-star-fill"></i>
+						</h3>
+				</div>
 
                 <div class="meta-top">
                   <ul>
@@ -124,7 +143,23 @@
                   
                   <div>
                     <h5 class="mb-3"><a th:text="'@'+${recensione.utenteCredentials.username}"></a></h5>
-					<h5><a th:text="${recensione.titolo}"></a></h5>                    
+					<h5>
+						
+						<div class="menuLibri content mt-1">
+							<div class="col">
+								<a th:text="${recensione.titolo}" class="me-5"></a>
+								
+								<a sec:authorize="hasAuthority('ADMIN')"	th:href="@{/admin/eliminaRecensione/{id}/(id=${recensione.id})}" class="read-more pt-1 pb-1 ps-2 pe-2"><span>Elimina recensione</span> <i class="bi bi-trash-fill"></i></a>
+							</div>
+							
+							<h3 class="me-3">
+													  
+								  <span th:text="${recensione.voto}"></span>
+
+								  /5 <i class="bi bi-star-fill"></i>
+								</h3>
+						</div>
+					</h5>                    
 					<p th:text="${recensione.testo}"></p>
                   </div>
                 </div>
@@ -162,6 +197,9 @@
                 <div class="row">
                   <div class="col-md-6 form-group">
 					<label class="form-label">Titolo:</label>
+					<span th:if="${#fields.hasErrors('newRecensione.titolo')}" th:errors="*{newRecensione.titolo}"
+									          th:style="'color:red'">
+									    </span>
                     <input  type="text" class="form-control" placeholder="Titolo della recensione" th:field="${newRecensione.titolo}" required>
                   </div>
                  
@@ -191,6 +229,9 @@
                 <div class="row">
                   <div class="col form-group">
 					<label class="form-label">Testo:</label>
+					<span th:if="${#fields.hasErrors('newRecensione.testo')}" th:errors="*{newRecensione.testo}"
+				          th:style="'color:red'">
+				    </span>
                     <textarea  class="form-control" placeholder="La tua recensione" th:field="${newRecensione.testo}"></textarea>
                   </div>
                 </div>
@@ -233,7 +274,7 @@
 			        <img th:src="@{/libro/{id}/immagine(id=${libroConsigliato.id})}" alt="Immagine libro"
 			             class="img-fluid ms-1 me-3" style="height: 70px;">
 			        <div>
-			            <h4><a th:href="@{/libro/{id}(id=${libroConsigliato.id})}" th:text="${libroConsigliato.titolo}"></a></h4>
+			            <h4><a th:href="@{/recensioni/{id}/(id=${libroConsigliato.id})}" th:text="${libroConsigliato.titolo}"></a></h4>
 			            <p>Anno pubblicazione: <span th:text="${libroConsigliato.anno}"></span></p>
 			        </div>
 			    </div>

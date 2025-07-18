@@ -29,12 +29,15 @@ import it.uniroma3.siw.model.Recensione;
 import it.uniroma3.siw.repository.LibroRepository;
 import it.uniroma3.siw.repository.RecensioneRepository;
 import it.uniroma3.siw.service.CredentialsService;
+import it.uniroma3.siw.service.LibroService;
+import jakarta.validation.Valid;
 
 @Controller
 public class RecensioneController {
 
 	@Autowired RecensioneRepository recensioneRepository;
 	@Autowired LibroRepository libroRepository;
+	@Autowired LibroService libroService;
 	@Autowired CredentialsService credentialsService;
 	
     @GetMapping("/recensioni/{id}/")
@@ -78,6 +81,14 @@ public class RecensioneController {
     		
     		List<Libro> suggeriti = altriLibri.stream().limit(3).collect(Collectors.toList());
     		
+    		Double media = libroService.getMediaVotiById(libro.getId()); 
+    		
+    		if(media == null) {
+    			media = 0.0;
+    		}
+    		
+    		
+    		model.addAttribute("media", media);
     		model.addAttribute("suggeriti", suggeriti);
     		model.addAttribute("haGiaRecensito", haGiaRecensito);
     		model.addAttribute("newRecensione", new Recensione());
@@ -92,14 +103,56 @@ public class RecensioneController {
 
     
     @PostMapping("/client/creaRecensione")
-    public String newRecensione(@ModelAttribute("newRecensione") Recensione recensione, 
+    public String newRecensione(@Valid @ModelAttribute("newRecensione") Recensione recensione, 
                                BindingResult bindingResult, 
                                @RequestParam("libroId") Long id, 
-                               Principal principal) {
-        
+                               Principal principal, 
+                               Model model) {
+
         if (principal == null) {
             return "redirect:/login";
         }
+
+        if (bindingResult.hasErrors()) {
+        	
+        	System.out.println("Errori di validazione:");
+	    	bindingResult.getFieldErrors().forEach(err -> {
+	    	    System.out.println("Campo: " + err.getField() + " - Messaggio: " + err.getDefaultMessage());
+	    	});
+        	
+            Optional<Libro> optLibro = this.libroRepository.findById(id);
+
+            if (optLibro.isPresent()) {
+                Libro libro = optLibro.get();
+                List<Recensione> recensioni = this.recensioneRepository.findAllByLibro(libro);
+
+                boolean haGiaRecensito = false;
+                if (principal != null) {
+                    Credentials credentials = credentialsService.getCredentials(principal.getName());
+                    haGiaRecensito = recensioni.stream()
+                        .anyMatch(r -> r.getUtenteCredentials() != null &&
+                                       r.getUtenteCredentials().getId().equals(credentials.getId()));
+                }
+
+                List<Libro> altriLibri = (List<Libro>) this.libroRepository.findAll();
+                altriLibri.remove(libro);
+                Collections.shuffle(altriLibri);
+                List<Libro> suggeriti = altriLibri.stream().limit(3).collect(Collectors.toList());
+
+                Double media = libroService.getMediaVotiById(libro.getId());
+                if (media == null) media = 0.0;
+
+                model.addAttribute("media", media);
+                model.addAttribute("suggeriti", suggeriti);
+                model.addAttribute("haGiaRecensito", haGiaRecensito);
+                model.addAttribute("newRecensione", recensione); 
+                model.addAttribute("libro", libro);
+                model.addAttribute("recensioni", recensioni);
+            }
+
+            return "/recensioni"; 
+        }
+
 
         Credentials credentials = credentialsService.getCredentials(principal.getName());
 
@@ -125,7 +178,18 @@ public class RecensioneController {
     }
 
 
-    
-    
+
+    @GetMapping("/admin/eliminaRecensione/{id}/")
+    public String eliminaRecensione(@PathVariable Long id) {
+        Optional<Recensione> recensioneOpt = recensioneRepository.findById(id);
+
+        if (recensioneOpt.isPresent()) {
+            Recensione recensione = recensioneOpt.get();
+            recensioneRepository.delete(recensione);
+        }
+
+        return "redirect:/catalogoLibri";
+    }
+
 	
 }

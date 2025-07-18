@@ -46,21 +46,22 @@ public class LibroService {
 	        return 0.0;
 	    }
 
-	    // Calcolo somma e conteggio (tutti i voti sono validi, perché int non può essere null)
 	    double somma = recensioni.stream()
-	        .mapToInt(Recensione::getVoto)  // usa mapToInt visto che è int
+	        .mapToInt(Recensione::getVoto)
 	        .sum();
 
 	    int count = recensioni.size();
 
-	    // Evito divisione per zero (anche se controllato sopra)
 	    if (count == 0) {
 	        return 0.0;
 	    }
 
-	    Double media = somma / count;
-	    return media;
+	    double media = somma / count;
+
+	    // Arrotonda alla prima cifra decimale
+	    return Math.round(media * 10.0) / 10.0;
 	}
+
 
 	
 	

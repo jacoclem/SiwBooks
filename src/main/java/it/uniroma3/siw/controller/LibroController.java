@@ -26,7 +26,9 @@ import it.uniroma3.siw.model.Libro;
 import it.uniroma3.siw.repository.AutoreRepository;
 import it.uniroma3.siw.repository.LibroRepository;
 import it.uniroma3.siw.service.LibroService;
+import it.uniroma3.siw.service.RecensioneService;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 
 @Controller
 public class LibroController {
@@ -34,6 +36,7 @@ public class LibroController {
 	@Autowired LibroService libroService;
 	@Autowired LibroRepository libroRepository;
 	@Autowired AutoreRepository autoreRepository;
+	@Autowired RecensioneService recensioneService;
 	
 	
 	
@@ -55,14 +58,27 @@ public class LibroController {
 	/*
 	 * Funzione Post che aggiunge un libro al catalogo
 	 */
+	@Transactional
 	@PostMapping("/admin/addLibro")
 	public String aggiungiNuovoLibro(
-	    @ModelAttribute("libro") Libro libro, 
+	    @Valid @ModelAttribute("libro") Libro libro, 
 	    BindingResult bindingResult,
-	    @RequestParam("immagine") MultipartFile file,
+	    @RequestParam("fileImmagine") MultipartFile file,
 	    @RequestParam("autore") Long id,
 	    Model model
 	) {
+	    if (bindingResult.hasErrors()) {
+	    	
+	    	System.out.println("Errori di validazione:");
+	    	bindingResult.getFieldErrors().forEach(err -> {
+	    	    System.out.println("Campo: " + err.getField() + " - Messaggio: " + err.getDefaultMessage());
+	    	});
+	        List<Autore> autori = (List<Autore>) autoreRepository.findAll();
+	        model.addAttribute("autori", autori);
+	        return "/admin/aggiungiLibro";
+	    }
+
+	    
 	    try {
 	        if (file != null && !file.isEmpty()) {
 	            libro.setImmagine(file.getBytes());
@@ -80,7 +96,7 @@ public class LibroController {
 	        return "/admin/aggiungiLibro";
 	    }
 
-	    // Aggiungi l'autore al libro
+	    
 	    List<Autore> autori = libro.getAutori();
 	    if (autori == null) {
 	        autori = new ArrayList<>();
@@ -88,7 +104,6 @@ public class LibroController {
 	    autori.add(autore);
 	    libro.setAutori(autori);
 
-	    // Aggiungi il libro all'autore (relazione bidirezionale!)
 	    List<Libro> libriAutore = autore.getLibri();
 	    if (libriAutore == null) {
 	        libriAutore = new ArrayList<>();
@@ -96,14 +111,15 @@ public class LibroController {
 	    libriAutore.add(libro);
 	    autore.setLibri(libriAutore);
 
-	    // Salva entrambi
+	    
 	    this.libroRepository.save(libro);
 	    this.autoreRepository.save(autore);
 
-	   
+	    System.out.println("Ci arrivo 4");
 	    
 	    return "redirect:/catalogoLibri";
 	}
+
 
 	
 	/*
@@ -192,6 +208,7 @@ public class LibroController {
     /*
      * Funzioen che elimina un libro
      */
+    @Transactional
     @GetMapping("/admin/eliminaLibro/{id}")
     public String deleteLibro(@PathVariable Long id) {
         Optional<Libro> optLibro = libroRepository.findById(id);
@@ -204,6 +221,8 @@ public class LibroController {
                 autore.getLibri().remove(libro);
                 autoreRepository.save(autore); // aggiorna autore per persistere il cambiamento
             }
+            
+            this.recensioneService.eliminaRecensioniDaLibro(libro);
 
             // Ora puoi eliminare il libro in sicurezza
             libroRepository.delete(libro);

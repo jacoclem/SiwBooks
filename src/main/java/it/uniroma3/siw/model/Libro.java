@@ -12,6 +12,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.Size;
 
 @Entity
 public class Libro {
@@ -20,12 +21,16 @@ public class Libro {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
+
+	@Size(max = 80, message = "Il titolo può contenere al massimo 80 caratteri")
 	@Column(nullable = false)
 	private String titolo;
 	
 	@Column(nullable = false)
 	private int anno;
 
+
+	@Size(max = 245, message = "La descrizione può contenere al massimo 245 caratteri")
 	@Column(nullable = false)
 	private String descrizione;
 	

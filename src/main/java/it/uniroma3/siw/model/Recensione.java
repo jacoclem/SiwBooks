@@ -8,6 +8,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.Size;
 
 @Entity
 public class Recensione {
@@ -17,12 +18,14 @@ public class Recensione {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
+	@Size(max = 80, message = "Il titolo può contenere al massimo 80 caratteri")
 	@Column(nullable = false)
 	private String titolo;
 	
 	@Column(nullable = false)
 	private int voto;
 	
+	@Size(max = 245, message = "Il testo può contenere al massimo 245 caratteri")
 	@Column(nullable = false)
 	private String testo;
 	
