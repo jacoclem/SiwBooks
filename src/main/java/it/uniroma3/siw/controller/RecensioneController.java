@@ -30,6 +30,7 @@ import it.uniroma3.siw.repository.LibroRepository;
 import it.uniroma3.siw.repository.RecensioneRepository;
 import it.uniroma3.siw.service.CredentialsService;
 import it.uniroma3.siw.service.LibroService;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 
 @Controller
@@ -190,6 +191,38 @@ public class RecensioneController {
 
         return "redirect:/catalogoLibri";
     }
+    
+    
+    @Transactional
+    @GetMapping("/client/listaRecensioni")
+    public String getRecensioniByUser(Principal principal, Model model) {
+    	
+    	
+    	Credentials credentials = this.credentialsService.getCredentials(principal.getName());
+    	
+    	List<Recensione> recensioni = this.recensioneRepository.findAllByUtenteCredentials(credentials);
+    	
+    	model.addAttribute("recensioni", recensioni);
+    	
+    	return "/client/mieRecensioni";
+    }
+    
+    @Transactional
+    @GetMapping("/client/eliminaRecensione/{id}/")
+    public String eliminaRecensioneUser(@PathVariable Long id, Principal principal) {
+        Optional<Recensione> recensioneOpt = recensioneRepository.findById(id);
+        Credentials credentials = this.credentialsService.getCredentials(principal.getName());
+        if (recensioneOpt.isPresent()) {
+            Recensione recensione = recensioneOpt.get();
+            if(recensione.getUtenteCredentials().equals(credentials)) {
+            	recensioneRepository.delete(recensione);
+            }
+            
+        }
+
+        return "redirect:/client/listaRecensioni";
+    }
+    
 
 	
 }
