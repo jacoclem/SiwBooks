@@ -1,0 +1,79 @@
+
+---
+
+Caso d’uso 1 –   Inserimento libro  
+Attori:   Amministratore
+Descrizione:   Inserimento di un nuovo libro nel catalogo.
+Scenario principale:  
+
+1. L’amministratore, dopo aver effettuato l'autenticazione, accede alla pagina "Catalogo Libri".
+2. Seleziona l’opzione “Aggiungi un nuovo libro”.
+3. Compila il modulo con i dati del libro e seleziona almeno un autore.
+4. Clicca su “Aggiungi Libro”.
+5. Il sistema aggiorna e visualizza il catalogo con il nuovo libro inserito.
+
+---
+
+Caso d’uso 2 –   Modifica dettagli libro  
+
+Attori:   Amministratore
+Descrizione:   Modifica delle informazioni relative a un libro.
+Scenario principale:  
+
+1. L’amministratore accede alla pagina "Catalogo Libri" dopo l’autenticazione.
+2. Seleziona l’opzione “Modifica dettagli” associata al libro desiderato.
+3. Il sistema mostra un modulo precompilato con i dati attuali del libro.
+4. L’amministratore apporta le modifiche desiderate e conferma con “Modifica Libro”.
+5. Il sistema aggiorna e mostra il catalogo con i dettagli del libro modificato.
+
+---
+
+Caso d’uso 3 –   Inserimento nuova recensione  
+
+Attori:   Utente registrato
+Descrizione:   Scrittura e pubblicazione di una nuova recensione per un libro.
+Scenario principale:  
+
+1. L’utente registrato accede al "Catalogo Libri".
+2. Seleziona “Vedi tutte le recensioni” per un determinato libro.
+3. Il sistema mostra la pagina del libro con le recensioni esistenti e, se non ne ha già scritta una, un modulo per l’inserimento.
+4. L’utente compila il modulo e clicca su “Pubblica Recensione”.
+5. Il sistema aggiorna e mostra la pagina del libro con la nuova recensione.
+
+---
+
+Caso d’uso 4 –   Eliminazione recensione  
+
+Attori:   Utente registrato
+Descrizione:   Eliminazione di una recensione precedentemente scritta.
+Scenario principale:
+
+1. L’utente registrato accede alla sezione “Le mie recensioni”.
+2. Il sistema mostra l’elenco delle recensioni dell’utente.
+3. L’utente seleziona “Elimina recensione” per il libro desiderato.
+4. Il sistema rimuove la recensione e aggiorna l’elenco.
+
+---
+Caso d’uso 5 –   Ricerca libro
+
+Attori:   Utente non registrato
+Descrizione:   Ricerca di libri tramite titolo.
+Scenario principale:  
+
+1. L’utente inserisce il titolo (o parte di esso) nella barra di ricerca della home page.
+2. Il sistema restituisce un elenco di libri che corrispondono, anche parzialmente, al termine cercato.
+
+---
+
+Caso d’uso 6 –   Visualizzazione recensioni  
+
+Attori:   Utente non registrato
+Descrizione:   Visualizzazione delle recensioni di un libro.
+Scenario principale:  
+
+1. L’utente accede alla pagina "Catalogo Libri".
+2. Seleziona “Vedi tutte le recensioni” per il libro desiderato.
+3. Il sistema mostra la pagina del libro con tutte le recensioni disponibili.
+
+---
+
